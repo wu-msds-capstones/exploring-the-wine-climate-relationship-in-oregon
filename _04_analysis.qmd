@@ -1,1 +1,201 @@
 # Analysis
+
+```{r setup-analysis}
+#| include: false
+library(arrow)
+library(tidyverse)
+library(ggplot2)
+library(scales)
+library(ggrepel)
+library(ggcorrplot)
+
+regional  <- read_parquet("data/analysis_panel_regional.parquet")
+statewide <- read_parquet("data/analysis_panel_statewide.parquet")
+
+regional <- regional %>%
+  mutate(yield_derived = production_tons / acres_harvested,
+         variety_label = str_trim(variety_label))
+statewide <- statewide %>%
+  mutate(yield_derived = production_tons / acres_harvested,
+         variety_label = str_trim(variety_label))
+
+key_varieties <- c("Pinot Noir", "Pinot Gris", "Chardonnay", "Riesling/White Riesling")
+```
+
+## Oregon's growing reliance on Pinot Noir
+
+```{r pinot_dominance}
+#| fig-cap: "Figure 1: Statewide grape tonnage by variety, 1990–2024"
+variety_share <- statewide %>%
+  filter(!is.na(production_share_pct), !is_zero_production,
+         variety_label != "All", yr >= 1990) %>%
+  mutate(variety_group = if_else(variety_label %in% key_varieties, variety_label, "Other")) %>%
+  group_by(yr, variety_group) %>%
+  summarise(production_tons = sum(production_tons, na.rm = TRUE), .groups = "drop") %>%
+  group_by(yr) %>%
+  mutate(production_share_pct = production_tons / sum(production_tons, na.rm = TRUE) * 100) %>%
+  ungroup()
+
+labels_df <- variety_share %>%
+  group_by(variety_group) %>%
+  filter(yr == max(yr)) %>%
+  ungroup()
+
+variety_colors <- c(
+  "Pinot Noir" = "#b2182b", "Pinot Gris" = "#4393c3"
+  , "Chardonnay" = "#d6604d", "Riesling/White Riesling" = "#d4a017"
+  , "Other" = "#999999"
+)
+
+variety_share %>%
+  mutate(is_pinot = variety_group == "Pinot Noir") %>%
+  ggplot(aes(yr, production_share_pct, color = variety_group, alpha = is_pinot, linewidth = is_pinot)) +
+  geom_line(alpha = 0.2, linewidth = 0.4) +
+  geom_smooth(method = "loess", se = FALSE, span = 0.4, aes(linewidth = is_pinot)) +
+  geom_text_repel(
+    data = labels_df, aes(label = variety_group, color = variety_group)
+    , nudge_x = 1, hjust = 0, size = 3.2
+    , segment.color = "grey70", segment.size = 0.3
+    , direction = "y", show.legend = FALSE
+  ) +
+  scale_color_manual(values = variety_colors) +
+  scale_linewidth_manual(values = c(`TRUE` = 1.4, `FALSE` = 0.8)) +
+  scale_alpha_manual(values = c(`TRUE` = 1, `FALSE` = 0.7)) +
+  scale_x_continuous(limits = c(1990, 2028), breaks = seq(1990, 2024, 5)) +
+  labs(title = "Pinot Noir has come to define Oregon wine",
+       subtitle = "Share of statewide tonnage by variety, 1990–2024. Everything outside the four key varieties is grouped as Other."
+       , x = NULL, y = "Production share (%)") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 16, face = "bold")
+        , plot.subtitle = element_text(size = 10, color = "grey40"))
+```
+
+*(Note: pre-2002 figures in this chart come from statewide reports; 2002 onward aggregates from regional data, and 1992/1997/2002 have no survey data. See [Data](#data--data-engineering) for the full data lineage discussion.)*
+
+Figure 1 demonstrates Pinot Noir's growing share of statewide tonnage, from roughtly 15% in 1990 to around 30% by 2020. This trend has continued to build, while other anchor varieties like Chardonnay and White Riesling have declined sharply over the same period. Pinot Gris is one variety that counteracts this trend, growing from a negligible share in 1990 to a stable ~8% by 2010.
+
+However, the dramatic shift toward Pinot Noir has remained a dominant trend, suggesting that Oregon's wine industry has narrowed its bet to a single, climate-sensitive variety over exactly the same decades that have seen a pronounced shift in the region's key climate indicators.
+
+## Evidence of a warming climate
+
+```{r gdd_statewide}
+#| fig-cap: "Growing degree day (GDD) anomaly relative to the 38-year average, overlaid with a 10-year rolling average"
+sw_climate <- statewide %>%
+  distinct(yr, gdd_apr_sep, gdd_apr_oct, frost_days_annual, frost_days_spring
+           , heat_stress_days, summer_tmax_mean, oct_ppt_mm, annual_ppt_mm
+           , vpd_max_summer, diurnal_range_ripening) %>%
+  arrange(yr) %>%
+  mutate(gdd_rolling10 = zoo::rollmean(gdd_apr_sep, 10, fill = NA, align = "right")
+         , gdd_anom = gdd_apr_sep - mean(gdd_apr_sep, na.rm = TRUE)
+         , gdd_rolling10_anom = gdd_rolling10 - mean(gdd_apr_sep, na.rm = TRUE))
+
+ggplot(sw_climate, aes(yr, gdd_anom)) +
+  geom_col(aes(fill = gdd_anom > 0), width = 0.7) +
+  geom_line(aes(y = gdd_rolling10_anom), color = "black", linewidth = 1) +
+  geom_hline(yintercept = 0, color = "grey30", linewidth = 0.4) +
+  scale_fill_manual(values = c(`TRUE` = "#b2182b", `FALSE` = "#2166ac"), guide = "none") +
+  geom_vline(xintercept = 2020, linetype = "dashed", color = "grey40", linewidth = 0.6) +
+  labs(title = "Oregon growing seasons: warmer or cooler than the 38-year average?",
+       subtitle = "Growing Degree Days (GDD) anomaly from the 1987–2024 mean. Black line = 10-year rolling average."
+       , x = NULL, y = "GDD (Apr–Sep) anomaly") +
+  theme_minimal()
+```
+
+Growing degree days (GDDs) show a clear and sustained upward trend, with a notably steep shift upward beginning around 2020—one reason we treat 2020 onward as a distinct case study rather than folding it into the long-run trend (see [Results](#results)).
+
+```{r climate_indicators}
+#| fig-cap: "Figure 2: Six viticulture-relevant climate indicators, statewide average, 1981–2024, each with a linear trend and 95% confidence interval"
+sw_climate %>%
+  select(yr,
+         `Frost risk days` = frost_days_spring) 
+         , `GDD (Apr-Sep)` = gdd_apr_sep
+         , `Peak summer temperature (°C)` = summer_tmax_mean
+         , `Heat stress days` = heat_stress_days
+         , `Diurnal ripening temperature range (°C)` = diurnal_range_ripening
+         , `October precipitation (mm)` = oct_ppt_mm %>%
+  pivot_longer(-yr, names_to = "indicator", values_to = "value") %>%
+  mutate(indicator = factor(indicator, levels = c(
+	 , "Frost risk days"
+	 , "GDD (Apr-Sep)"
+	 , "Peak summer temperature (°C)"
+	 , "Heat stress days"
+	 , "Diurnal ripening temperature range (°C)"
+	 , "October precipitation (mm)", 
+  ))) %>%
+  ggplot(aes(yr, value)) +
+  geom_line(color = "grey60", alpha = 0.7) +
+  geom_smooth(method = "lm", se = TRUE, color = "#b2182b", fill = "#b2182b", alpha = 0.15) +
+  facet_wrap(~indicator, scales = "free_y", ncol = 2) +
+  labs(title = "Oregon climate trends, 1981–2024"
+       , subtitle = "Linear trend lines with 95% confidence intervals"
+       , x = NULL, y = NULL) +
+  theme_minimal()
+```
+
+Figure 2 summarizes six key viticultural climate indicators. Growing degree days, peak summer temperature, and heat stress days are all trending up with tight confidence intervals, demonstrating a warming signal is both real and steep. Spring frost days are essentially flat, a meaningful non-finding since it means the warming trend has not (yet) reduced the risk of a damaging frost event during spring bud break, even as summer heat accumulation climbs. October precipitation trends slightly upward but noisily, with no strong signal either way.
+
+The sixth indicator—ripening-season diurnal temperature range—is the one that moves in the opposite direction from the rest, and it does so specifically because it isn't a simple byproduct of an overall upward heat trend. This finding is most directly relevant to Oregon's growing dependence on Pinot Noir.
+
+## How the climate features relate
+
+Several of these climate measures are closely related to aspects of the same underlying warming trend.
+
+```{r climate_correlations}
+#| fig-cap: "Figure 3: correlation matrix of annual climate features, region-year level, 1981–2024."
+ry <- regional %>%
+  distinct(region_label, yr, gdd_apr_sep, gdd_veraison_harvest
+           , frost_days_spring, heat_stress_days, coldest_spring_night_c
+           , oct_ppt_mm, sep_oct_ppt_mm, gs_ppt_mm, vpd_max_summer, diurnal_range_ripening)
+
+corr_matrix <- ry %>%
+  select(
+    frost_days_spring
+    , coldest_spring_night_c
+    , gdd_veraison_harvest
+    , gdd_apr_sep
+    , heat_stress_days
+    , vpd_max_summer
+    , diurnal_range_ripening
+    , gs_ppt_mm
+    , sep_oct_ppt_mm
+    , oct_ppt_mm
+  ) %>%
+  rename(
+    `Frost risk days` = frost_days_spring
+    , `Coldest spring night` = coldest_spring_night_c
+    , `GDD Veraison-Harvest` = gdd_veraison_harvest
+    , `GDD Apr-Sep` = gdd_apr_sep
+    , `Heat stress days` = heat_stress_days
+    , `Summer VPD` = vpd_max_summer
+    , `Diurnal temp range` = diurnal_range_ripening
+    , `Growing season precip` = gs_ppt_mm
+    , `Sep-Oct precip (mm)` = sep_oct_ppt_mm
+    , `Oct precip (mm)` = oct_ppt_mm
+  ) %>%
+  cor(use = "pairwise.complete.obs")
+
+ggcorrplot(corr_matrix, type = "upper", lab = TRUE, lab_size = 3,
+           colors = c("#4A7CC7", "white", "#8B1E3F"))
+```
+
+Figure 3 identifies three clusters of variables stand out as measuring largely the same underlying phenomenon from different angles, rather than independent drivers: 
+
+1. **Spring frost risk:** Frost risk days and coldest spring night are correlated at -0.85, which makes sense given one is a temperature reading and the other is a threshold-count derived from it
+2. **Summer heat accumulation:** Heat stress days and summer VPD are both correlated above 0.7 with all the GDD variables
+3. **Fall precipitation:** All the precipitation measures move together agove 0.8
+
+We chose to remove variables from each cluster to prevent inflated standard errors and unstable coefficients that would result from includeing all of them as separate predictors.
+
+We note, however that diurnal ripening temperature range is negatively correlated with nearly every heat-related feature, consistent with the pattern described in [Background](#background), where nights warm faster than days as the season heats up overall, compressing the day-night swing. 
+
+Additionally, growing-season precipitation is negatively correlated with GDD Apr-Sep (-0.46), indicating that hotter years tend to be drier years.
+
+
+
+
+
+
+
+
+
