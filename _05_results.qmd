@@ -6,7 +6,6 @@ library(arrow)
 library(tidyverse)
 library(ggplot2)
 library(scales)
-library(tidytext)
 
 regional  <- read_parquet("data/analysis_panel_regional.parquet")
 statewide <- read_parquet("data/analysis_panel_statewide.parquet")
@@ -19,17 +18,6 @@ statewide <- statewide %>%
          variety_label = str_trim(variety_label))
 
 key_varieties <- c("Pinot Noir", "Pinot Gris", "Chardonnay", "Riesling/White Riesling")
-
-stage_performance <- read_parquet("data/stage_test_performance.parquet")
-stage_importance  <- read_parquet("data/stage_importance.parquet")
-stage_residuals   <- read_parquet("data/stage_residuals.parquet")
-post2020_case     <- read_parquet("data/post2020_case_study.parquet")
-
-stage_labels <- c(
-  stage1_spring_svm  = "Stage 1: Spring",
-  stage2_summer_svm  = "Stage 2: Summer",
-  stage3_harvest_svm = "Stage 3: Harvest"
-)
 ```
 
 ## Production and yield have, so far, kept climbing
@@ -48,9 +36,9 @@ ggplot(statewide_total, aes(x = yr, y = production_tons)) +
   geom_line(color = "gray70", linewidth = 0.5, alpha = 0.6) +
   geom_smooth(data = statewide_total %>% filter(yr <= 2001), method = "loess", se = FALSE, color = "#8B1E3F", linewidth = 1.3) +
   geom_smooth(data = statewide_total %>% filter(yr >= 2002), method = "loess", se = FALSE, color = "#8B1E3F", linewidth = 1.3) +
-  annotate("segment", x = 2020, xend = 2020, y = 0, yend = max(statewide_total$production_tons, na.rm = TRUE) * 0.72
+  annotate("segment", x = 2020, xend = 2020, y = 0, yend = max(statewide_total$production_tons, na.rm = TRUE) * 0.56
            , linetype = "dashed", color = "gray40", linewidth = 0.5) +
-  annotate("text", x = 2020, y = max(statewide_total$production_tons, na.rm = TRUE) * 0.68
+  annotate("text", x = 2021, y = max(statewide_total$production_tons, na.rm = TRUE) * 0.53
            , label = str_wrap("2020: wildfire smoke taint", width = 15), hjust = 0, size = 3.2, color = "gray30", lineheight = 0.9) +
   scale_y_continuous(labels = comma) +
   labs(title = "Total Oregon wine grape production, 1987–2024",
@@ -89,7 +77,7 @@ ggplot(weighted_yield_variety, aes(yr, weighted_yield, color = variety_group)) +
     , "Other" = "#999999")
     ) +
   labs(title = "Yield by variety, statewide"
-       , subtitle = "Production-weighted yield (total tons ÷ total harvested acres) — normalizes for acreage changes"
+       , subtitle = "Production-weighted yield (total tons ÷ total harvested acres)"
        , x = NULL, y = "Yield (tons per acre)", color = "Variety") +
   theme_minimal() +
   theme(legend.position = "none"
@@ -114,7 +102,6 @@ weighted_yield_region <- regional %>%
 
 ggplot(weighted_yield_region, aes(yr, weighted_yield, color = region_label)) +
   geom_line(linewidth = 0.8) +
-  geom_vline(xintercept = 2020, linetype = "dashed", color = "grey40") +
   scale_color_brewer(palette = "Set1") +
   labs(title = "Yield by region, 2002–2024"
        , subtitle = "Production-weighted yield (total tons ÷ total harvested acres)"
@@ -150,7 +137,6 @@ ggplot(sw_climate, aes(yr, diurnal_range_ripening)) +
            , hjust = 0, size = 3, color = "#4A7CC7") +
   geom_line(color = "grey60", alpha = 0.7, linewidth = 0.6) +
   geom_smooth(method = "lm", se = TRUE, color = "#8B1E3F", fill = "#8B1E3F", alpha = 0.15, linewidth = 1.1) +
-  geom_vline(xintercept = 2020, linetype = "dashed", color = "grey40", linewidth = 0.5) +
   labs(title = "Ripening-season diurnal temperature range is shrinking"
        , subtitle = "Day/night temperature swing during ripening (Aug-Sep), statewide average, 1981–2024"
        , x = NULL, y = "Diurnal temperature range (°C)") +
@@ -166,116 +152,7 @@ The narrowing diurnal range finding is a leading indicator worth flagging even t
 
 ## Predicting yield across the growing season
 
-We next aim to create a predictive model that is built on two key observations from our analysis thus far: (1) yield has been resilient across the historical climate range and (2) the climate signal accumulates in stages over the course of the growing season—initial spring frost risk, then summer heat, and lastly harvest-season conditions. We argue that model built only on a single end-of-season snapshot is less useful to a wine grower who experiences these climate conditions sequentially throughout the annual growth cycle.
+We next aim to create a predictive model that is built on two key observations from our analysis thus far: (1) yield has been resilient across the historical climate range and (2) the climate signal accumulates in stages over the course of the growing season—initial spring frost risk, then summer heat, then harvest-season conditions. We argue that model built only on a single end-of-season snapshot is less useful to a wine grower who experiences these climate conditions sequentially throughout the annual growth cycle.
 
-## From production and price to a staged yield model
 
-Our original proposal called for a two-stage gradient-boosted forest (XGBoost), predicting production and then price, compared across Oregon, California, and Washington. In practice, several findings from our own statistical analysis led us to a dfferent and more useful approach. Price data is only avaible at the region level from 2010 onward which left too short a window to support a second-pricing-stage model. California and Washington integration remains a longer-term goal of the underlying data pipeline rather than a modeling input for this phase. Most importantly, our own correaltion and yield analysis pointed toward a more specific question than "Does climate affect production?" and instaed toward (1) whether climate sensitivity differs meaningfully *by variety*, and (2) whether that sensitivity depends on *which point in the growing season* is being measured.
 
-Thus a single-outcome model was built, predicting 'yield_derived' (production tons per harvested acre) for Oregon's robust region-by-variety combinations using a SVM with a RBF kernel, tuned via stratified cross-validation. Rather than fitting one model on the full season's climate data, we fit three models representing what a grower would actually know at each stage of the season: a spring model (frost risk only), a summer model (adding growing degree days, heat stress, and vapor pressure deficit), and a harvest model (adding véraison-to-harvest GDD, October precipitation, and ripening diurnal range). All three stages were evaluated on the same pre-2020 train/test partition and cross-validation folds, so that any difference in performance reflects the added climate information rather than a different sample. Post-2020 data was held out entirely from training and evaluated separately, as a case study rather than a fourth fold, consistent with our treatment of 2020 elsewhere in this report as a discrete disruption (wildfire smoke taint) rather than part of the underlying climate trend.
-
-## Climate becomes predictive mid-season, then plateaus
-
-```{r stage-performance}
-#| fig-cap: "Figure 8: Held-out test performance by growing-season stage"
-stage_performance %>%
-  filter(.metric %in% c("rmse", "rsq")) %>%
-  mutate(
-    stage  = recode(stage, !!!stage_labels),
-    metric = recode(.metric, rmse = "RMSE (tons/acre)", rsq = "R\u00b2")
-  ) %>%
-  ggplot(aes(x = stage, y = .estimate)) +
-  geom_col(fill = "#8B1E3F") +
-  facet_wrap(~metric, scales = "free_y") +
-  labs(title = "Held-out test performance by stage", x = NULL, y = NULL) +
-  theme_minimal()
-```
-
-Figure 8 summarizes held-out test performance across the three stages. Moving from the spring model to the summer model very nearly doubles the variance explained (R² rising from 0.16 to 0.28, RMSE falling from 0.77 to 0.70 tons/acre); moving from the summer model to the harvest model adds comparatively little (R² of 0.29, RMSE of 0.70). This is not a modeling shortfall — it is the same pattern already established elsewhere in this report from a different angle. Our diurnal-range analysis (see [Results](#results)) found that Oregon's narrowing ripening-season temperature swing is a *quality* signal rather than a *yield* signal, one that 'models built on yield alone will miss.' The staged model reaches the same conclusion empirically: adding harvest-window features, including ripening diurnal range, does almost nothing to improve yield prediction, because yield genuinely is not where that climate signal shows up.
-
-Also worth stating, even the best-performing stage explains under a third of the yield's vairance. We read this as a finding rather than a limitation, as it is the model-based counterpart to a pattern our correlation analysis already surfaced: within the historical range of growing degree days and heat stress Oregon has experience so far, warmer conditions have generally corresponded with higher yield, not lower, and yield has proven comparatively resilient to the climate trend documented throughout this report. Our model struggling to predict yield from climate alone is consistent with climated being a secondary driver of yield ouctomes at the level this dataset can observe.
-
-## Variety identity outweights early-season climate
-
-```{r importance-plot}
-#| fig-cap: "Figure 9: Permutation importance, top features by stage"
-stage_importance %>%
-  mutate(stage = recode(stage, !!!stage_labels)) %>%
-  group_by(stage) %>%
-  slice_max(Importance, n = 8) %>%
-  ungroup() %>%
-  ggplot(aes(x = reorder_within(Variable, Importance, stage), y = Importance)) +
-  geom_col(fill = "#4A7CC7") +
-  coord_flip() +
-  scale_x_reordered() +
-  facet_wrap(~stage, scales = "free_y") +
-  labs(title = "Which features actually move the model's predictions",
-       x = NULL, y = "Importance (RMSE increase when permuted)") +
-  theme_minimal()
-```
-
-Figure 9 shows permutation importance for each stage's top features. In the spring model, predictive power comes almost entirely from variety identity rather than from the available climate features (frost days, coldest spring night). This is the clearest evidence yet for the varietal-susceptibility pattern this report has built toward since our correlation analysis (see [Analysis](#analysis)), where Pinot Gris (r = 0.47), Pinot Noir (r = 0.32), and Riesling (r = -0.17) showed meaningfully different yield sensitivity to growing degree days. The correlation coefficients shows that sensitivity differs; the model falling back almost entirely on variety identity when climate information is thin shows that variety *is* the dominant signal at that point in the season.
-
-By the summer and harvest stages, growing degree days (April-Septmber) emerge as the leading climate feature, consistently outranking summer vapor pressure deficit. Our earlier variance inflation factor analysis (see [Analysis](#analysis)) found that GDD and VPD are highly correlated, so the model's preference for GDD is not surprising. Ulitmately, the staged model resolved that GDD is the feature actually doing the predictive work, and that VPD's strong pairwise correaltion with it appears to have been substanitally reduntant.
-
-## Where the model explains variety well, and where it doesn't
-
-```{r residual-plot}
-#| fig-cap: "Figure 10: Residual spread by variety, harvest-stage model"
-stage_residuals %>%
-  filter(stage == "stage3_harvest_svm") %>%
-  mutate(variety_label = fct_reorder(variety_label, residual, .fun = median)) %>%
-  ggplot(aes(x = variety_label, y = residual)) +
-  geom_boxplot(fill = "#4A7CC7", alpha = 0.3) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "grey40") +
-  coord_flip() +
-  labs(title = "Harvest-stage residuals by variety",
-       subtitle = "Positive = model underestimated actual yield; negative = model overestimated",
-       x = NULL, y = "Residual (actual \u2212 predicted yield, tons/acre)") +
-  theme_minimal()
-```
-
-Figure 10 shows harvest-stage residuals by variety. The model does a good job of explaining yield for Pinot Noir, Chardonnay, and Riesling, which all show residuals centered around zero with a reliatvely tight spread. However, for the states thiner varieties, such as Cabernet Sauvignon residuals sit consistently below zero, meaning the model systematically overestimates its yield; Merlot's sits consistently above zero and spans the widest range of any variety, meaning that the model systematically underestimated it and does so unevenly. Further, Pinot Blanc's residuals also skew positive.
-
-This is a meaninful qualifier for the varietal-susceptability pattern this report has built towards since our correlation analysis (see [Analysis](#analysis)). The model's ability to explain yield is not uniform across varieties, and the model's performance is strongest for the varieties that are most important to Oregon's wine industry. This is consistent with the model's permutation importance results, which found that variety identity was the most important feature in the spring stage and remained a strong predictor throughout the season.
-
-## Post-2020 case study: wildfire smoke taint
-
-```{r post2020-plot}
-#| fig-cap: "Figure 11: Post-2020 residuals, model trained only on pre-2020 data"
-post2020_case <- post2020_case %>%
-  mutate(
-    wine_color = if_else(
-      variety_label %in% c("Pinot Noir", "Cabernet Savignon", "Merlot"),
-      "Red", "White"
-    ),
-    # Chardonnay and Riesling/White Riesling are the two varieties Figure 1
-    # showed losing statewide production share most sharply since 1990.
-    phasing_out  = variety_label %in% c("Chardonnay", "Riesling/White Riesling"),
-    marker_group = if_else(phasing_out, variety_label, "Other varieties")
-  )
-
-ggplot(post2020_case, aes(x = yr, y = residual)) +
-  geom_point(aes(color = wine_color, shape = marker_group,
-                 size = phasing_out)) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "grey40") +
-  scale_color_manual(values = c(Red = "#8B1E3F", White = "#D4A017"),
-                      name = "Wine color") +
-  scale_shape_manual(values = c(Chardonnay = 17, `Riesling/White Riesling` = 15,
-                                 `Other varieties` = 16),
-                      name = "Variety") +
-  scale_size_manual(values = c(`TRUE` = 3.5, `FALSE` = 1.8), guide = "none") +
-  scale_alpha_manual(values = c(`TRUE` = 1, `FALSE` = 0.4), guide = "none") +
-  facet_wrap(~region_label) +
-  labs(title = "Post-2020 case study: actual vs. predicted yield",
-       subtitle = "Filled triangles/squares = Chardonnay and Riesling, the two varieties losing statewide share (Figure 1)",
-       x = NULL, y = "Residual (actual \u2212 predicted yield)") +
-  theme_minimal()
-```
-Figure 11 applies the harvest-stage model, trained exclusively on pre-2020 data, to the 2020–2024 case-study window, now colored by red versus white variety and with Chardonnay and Riesling/White Riesling, the two varieties Figure 1 showed losing the most statewide production share since 1990 — pulled out as distinct markers. If the 2020 production disruption discussed in [Results](#results) were purely a matter of unusual climate conditions, we would expect the model's largest negative residuals to concentrate in 2020 itself, and specifically among red varieties, consistent with our production-weighted yield analysis showing Pinot Noir was hit hardest by wildfire smoke taint. Instead, 2020 residuals sit closer to zero across most regions than expected, while the more pronounced negative clusters appear in 2021 and 2023.
-
-Ulitametely, the post-2020 case study shows that wildfire smoke taint is a discrete event that is not well captured by climate features alone. The model's inability to predict the 2020 disruption, and its subsequent overestimation of yield in 2021 and 2023, suggests that other factors, such as market dynamics or management practices, may have played a role in the observed yield outcomes.
-
-## Limitations
-
-With rouglhly 1,000 usable region-by-variety-year observations split across eight varieties and five regions, with several regions varieties such as Pinot Blanc and Merlot having few enough rows that individual outlier years can meaningfully shift both train/test comparability and residual behavior; we verified and, where appropriate, constrained our train/test split to prevent a single high-leverage year from defining a variety's entire test-set performance (see accompanying modeling notebook for the specific diagnostic). An R² below 0.30 at every stage means this model should be read as evidence about *where* and *for which varieties* climate signal is more or less present in the yield record, not as a production-forecasting tool. And because yield, not price or the qualitative characteristics that matter to Oregon's fine wine reputation, is the only outcome modeled here, these results say nothing about the diurnal-range quality concern raised earlier in this report — a limitation that is itself consistent with, rather than in tension with, our finding that harvest-window features add little to yield prediction specifically.
