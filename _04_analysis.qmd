@@ -9,6 +9,7 @@ library(scales)
 library(ggrepel)
 library(ggcorrplot)
 library(strucchange)
+library(car)
 
 regional  <- read_parquet("data/analysis_panel_regional.parquet")
 statewide <- read_parquet("data/analysis_panel_statewide.parquet")
