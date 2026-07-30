@@ -11,13 +11,43 @@ regional  <- read_parquet("data/analysis_panel_regional.parquet")
 statewide <- read_parquet("data/analysis_panel_statewide.parquet")
 
 regional <- regional %>%
-  mutate(yield_derived = production_tons / acres_harvested,
-         variety_label = str_trim(variety_label))
-statewide <- statewide %>%
-  mutate(yield_derived = production_tons / acres_harvested,
-         variety_label = str_trim(variety_label))
+  mutate(yield_derived = production_tons / acres_harvested
+         , variety_label = str_trim(variety_label)
+         , variety_label = if_else(variety_label == "Riesling/White Riesling", "Riesling", variety_label))
 
-key_varieties <- c("Pinot Noir", "Pinot Gris", "Chardonnay", "Riesling/White Riesling")
+statewide <- statewide %>%
+  mutate(yield_derived = production_tons / acres_harvested
+         , variety_label = str_trim(variety_label)
+         , variety_label = if_else(variety_label == "Riesling/White Riesling", "Riesling", variety_label))
+
+key_varieties <- c("Pinot Noir", "Pinot Gris", "Chardonnay", "Riesling")
+
+variety_colors <- c(
+  "Pinot Noir" = "#b2182b"
+  , "Pinot Gris" = "#4393c3"
+  , "Chardonnay" = "#d6604d"
+  , "Riesling" = "#d4a017"
+  , "Other" = "#999999"
+)
+
+region_levels <- regional %>%
+  filter(!region_label %in% c("Eastern Oregon", "Other Region", "Other Oregon")) %>%
+  distinct(region_label) %>%
+  arrange(region_label) %>%
+  pull(region_label)
+
+region_colors <- setNames(
+  RColorBrewer::brewer.pal(max(3, length(region_levels)), "Set1")[seq_along(region_levels)]
+  , region_levels
+)
+
+lighten_color <- function(hex, amount = 0.65) {
+  rgb_val <- grDevices::col2rgb(hex) / 255
+  new_rgb <- rgb_val + (1 - rgb_val) * amount
+  grDevices::rgb(new_rgb[1], new_rgb[2], new_rgb[3])
+}
+variety_colors_light <- setNames(sapply(variety_colors, lighten_color), names(variety_colors))
+region_colors_light <- setNames(sapply(region_colors, lighten_color), names(region_colors))
 ```
 
 ## Production and yield have, so far, kept climbing
@@ -26,97 +56,179 @@ key_varieties <- c("Pinot Noir", "Pinot Gris", "Chardonnay", "Riesling/White Rie
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-cap: "Figure 5: Total Oregon wine grape production, 1987–2024, with separate smoothed trends fit around 2002 reporting methodology shift"
-statewide_total <- statewide %>%
-  filter(variety_label == "All") %>%
-  select(yr, production_tons) %>%
+#| fig-width: 7
+#| fig-cap: "Figure 5: Statewide production-weighted yield, 1987–2024, with separate smoothed trends fit around 2002 reporting methodology shift"
+statewide_yield <- statewide %>%
+  filter(variety_label == "All"
+         , !is.na(production_tons), !is.na(acres_harvested)
+         , acres_harvested > 100) %>%   # drops the 2009 row (acres_harvested = 25.63, production missing)
+  mutate(weighted_yield = production_tons / acres_harvested) %>%
+  select(yr, weighted_yield) %>%
   arrange(yr)
 
-ggplot(statewide_total, aes(x = yr, y = production_tons)) +
+ggplot(statewide_yield, aes(x = yr, y = weighted_yield)) +
   geom_line(color = "gray70", linewidth = 0.5, alpha = 0.6) +
-  geom_smooth(data = statewide_total %>% filter(yr <= 2001), method = "loess", se = FALSE, color = "#8B1E3F", linewidth = 1.3) +
-  geom_smooth(data = statewide_total %>% filter(yr >= 2002), method = "loess", se = FALSE, color = "#8B1E3F", linewidth = 1.3) +
-  annotate("segment", x = 2020, xend = 2020, y = 0, yend = max(statewide_total$production_tons, na.rm = TRUE) * 0.56
+  geom_smooth(data = statewide_yield %>% filter(yr <= 2001), method = "loess", se = FALSE, color = "#8B1E3F", linewidth = 1.3) +
+  geom_smooth(data = statewide_yield %>% filter(yr >= 2002), method = "loess", se = FALSE, color = "#8B1E3F", linewidth = 1.3) +
+  annotate("segment", x = 2020, xend = 2020, y = 0, yend = max(statewide_yield$weighted_yield, na.rm = TRUE) * 0.65
            , linetype = "dashed", color = "gray40", linewidth = 0.5) +
-  annotate("text", x = 2021, y = max(statewide_total$production_tons, na.rm = TRUE) * 0.53
-           , label = str_wrap("2020: wildfire smoke taint", width = 15), hjust = 0, size = 3.2, color = "gray30", lineheight = 0.9) +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Total Oregon wine grape production, 1987–2024",
+  annotate("text", x = 2021, y = max(statewide_yield$weighted_yield, na.rm = TRUE) * 0.6
+           , label = str_wrap("2020: wildfire smoke taint", width = 15), hjust = 0, size = 3.2, color = "gray30", lineheight = 1) +
+  labs(title = "Statewide production-weighted yield, 1987–2024",
        subtitle = "Smoothed trend, fit separately before/after 2002 methodology shift"
-       , x = NULL, y = "Production (tons)") +
+       , x = NULL, y = "Yield (tons per acre)") +
   theme_minimal() +
   theme(legend.position = "none"
       , plot.title = element_text(size = 16, face = "bold")
       , plot.subtitle = element_text(size = 10, color = "grey40"))
 ```
 
-Figure 5 demonstrates roughly tenfold growth in statewide wine production since the late 1980s, tracking the industry's broader economic growth. We note a clear interruption in 2020, corresponding to a season with severe wildfire smoke taint that resulted in a substantial share of unusable fruit among that year's harvest. This represents a discrete event rather than a gradual climate-trend effect.
+Figure 5 plots statewide production-weighted yield (total tons produced divided by total acres harvested) for every year from 1987 to 2024. This isolates how productive Oregon's vineyard acreage has become over time, independent of how much new acreage has been planted. The thin gray line traces the raw annual totals as reported while the bold red trend line summarizes the underlying pattern using a smoothed fit. Harvested acreage expanded by roughly the same order of magnitude as raw production did over this period, which means most of the industry's growth has come from planting more acres rather than from getting more productive per acre. Yield itself has seen modest growth, averaging around ~2.5 tons per acre in 1990s and 2000s and settling closer to ~3 tons per acre in the most recent decade. 
+
+We note a clear interruption in 2020, corresponding to a season with severe wildfire smoke taint that resulted in a substantial share of unusable fruit among that year's harvest. This represents a discrete event rather than a gradual climate-trend effect.
 
 ```{r yield_by_variety}
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-cap: "Figure 6: Production-weighted yield by **variety**, statewide, 2002–2024"
-weighted_yield_variety <- regional %>%
+#| fig-height: 5
+#| fig-width: 7
+#| fig-cap: "Figure 6: Production-weighted yield by **variety**"
+weighted_yield_variety <- statewide %>%
   filter(!is.na(production_tons), !is.na(acres_harvested), acres_harvested > 0
-         , yr >= 2002, production_tons > 0, variety_label != "All") %>%
-  mutate(variety_group = if_else(variety_label %in% key_varieties, variety_label, "Other")) %>%
-  group_by(yr, variety_group) %>%
+         , production_tons > 0
+         , yr >= 1988
+         , variety_label %in% key_varieties) %>%
+  group_by(yr, variety_group = variety_label) %>%
   summarise(total_prod = sum(production_tons, na.rm = TRUE)
             , total_acres = sum(acres_harvested, na.rm = TRUE)
             , weighted_yield = total_prod / total_acres
-            , .groups = "drop")
+            , .groups = "drop") %>%
+  mutate(raw_color = variety_colors_light[variety_group]
+         , trend_color = variety_colors[variety_group])
 
-ggplot(weighted_yield_variety, aes(yr, weighted_yield, color = variety_group)) +
-  geom_line() +
-  scale_color_manual(values = c(
-    "Pinot Noir" = "#b2182b"
-    , "Pinot Gris" = "#4393c3"
-    , "Chardonnay" = "#d6604d"
-    , "Riesling/White Riesling" = "#d4a017"
-    , "Other" = "#999999")
-    ) +
+ggplot(weighted_yield_variety, aes(yr, weighted_yield)) +
+  geom_line(aes(color = raw_color), linewidth = 0.5) +
+  geom_smooth(aes(color = trend_color), method = "loess", se = FALSE, linewidth = 1.1) +
+  scale_color_identity() +
+  facet_wrap(~ variety_group, scales = "fixed") +
   labs(title = "Yield by variety, statewide"
-       , subtitle = "Production-weighted yield (total tons ÷ total harvested acres)"
-       , x = NULL, y = "Yield (tons per acre)", color = "Variety") +
+       , subtitle = 'Production-weighted yield (total tons ÷ total harvested acres)'
+       , x = NULL, y = "Yield (tons per acre)") +
   theme_minimal() +
   theme(legend.position = "none"
       , plot.title = element_text(size = 16, face = "bold")
-      , plot.subtitle = element_text(size = 10, color = "grey40"))
+      , plot.subtitle = element_text(size = 10, color = "grey40")
+      , strip.text = element_text(face = "bold")
+      , axis.text = element_text(size = 8)
+      , panel.spacing = unit(1, "lines"))
 ```
+```{r vals_for_inline_calcs}
+#| include: false
+# Split years into cool/mid/hot growing seasons by statewide GDD, then compare
+# each variety's weighted yield across those tercile buckets. Restricted to
+# 2002+ for the same data-reliability reason cited elsewhere for statewide
+# variety-level figures.
+yearly_gdd <- statewide %>%
+  filter(yr >= 2002) %>%
+  distinct(yr, gdd_apr_sep) %>%
+  arrange(yr) %>%
+  mutate(gdd_tercile = ntile(gdd_apr_sep, 3)
+         , gdd_tercile = factor(gdd_tercile, levels = 1:3, labels = c("cool", "mid", "hot")))
+
+variety_temp_response <- weighted_yield_variety %>%
+  filter(yr >= 2002) %>%
+  inner_join(yearly_gdd %>% select(yr, gdd_tercile), by = "yr") %>%
+  group_by(variety_group, gdd_tercile) %>%
+  summarise(mean_yield = mean(weighted_yield, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = gdd_tercile, values_from = mean_yield) %>%
+  mutate(pct_change_hot_vs_cool = (hot - cool) / cool * 100)
+
+get_pct_change <- function(variety) {
+  val <- variety_temp_response %>%
+    filter(variety_group == variety) %>%
+    pull(pct_change_hot_vs_cool)
+  round(val, 0)
+}
+```
+
+Figure 6 breaks down the production-weighted yield for each of the four leading varietals: Chardonnay, Pinot Gris, Pinot Noir, and Riesling. Each panel repeats the same visual structure as Figure 5: a thin line for the raw annual value and a bold smoothed trend layered on top.
+
+We see a dramatic dip in Pinot Noir yield in 2020 while Pinot Gris and Chardonnay barely register the disruption. This selective impact is consistent with wildfire smoke taint, which binds more readily to red wine grapes because of their extended skin-contact fermentation process than to white wine production; anecdotally, 2020 also drove some producers toward "white Pinot" as a workaround, itself a sign of the industry's adaptive capacity.
+
+All varieties rebound to new all-time highs within three years. Indeed, outside of that one disrupted year, yield for Pinot Noir and the other key varieties has held steady or trended upward statewide, and the same holds when the data is cut by region instead of variety in Figure 7 (below). The historical pattern demonstrates that, within the range of GDD and heat stress Oregon has experienced thus far, warmer conditions have generally corresponded with higher yields per acre across nearly every variety and region.
+
+However, this pattern is not uniform across varieties. Pinot Gris demonstrated the largest yield gain of the four key varieties (roughly a `r get_pct_change("Pinot Gris")`% increase), with Pinot Noir close behind (`r get_pct_change("Pinot Noir")`%) and Chardonnay more modest (`r get_pct_change("Chardonnay")`%). In contrast, Riesling shows essentially no relationship between yield and warmth of the growing season (`r get_pct_change("Riesling")`%). This could be attributed to the fact that its production is concentrated largely in the cooler North Willamette Valley that rarely experiences the warmer end of the state's climate range. 
+
+We also note that Pinot Gris' rising share of statewide production (Figure 1) is attributable not not only to an increasing share of planted acres, but also because this variety appears to yield higher volumes in the warmer seasons that are becoming increasingly common in Oregon.
 
 ```{r yield_by_region}
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-cap: "Figure 7: Production-weighted yield by **region**, 2002–2024"
+#| fig-height: 7.5
+#| fig-width: 7
+#| fig-cap: "Figure 7: Production-weighted yield by **region**"
 weighted_yield_region <- regional %>%
   filter(!is.na(production_tons), !is.na(acres_harvested), acres_harvested > 0
-         , production_tons > 0, yr >= 2002
+         , production_tons > 0
+         , yr >= 1988
          , !region_label %in% c("Eastern Oregon", "Other Region", "Other Oregon")) %>%
-  group_by(yr, region_label) %>%
+  group_by(yr, region_group = region_label) %>%
   summarise(total_prod = sum(production_tons, na.rm = TRUE)
             , total_acres = sum(acres_harvested, na.rm = TRUE)
             , weighted_yield = total_prod / total_acres
-            , .groups = "drop")
+            , .groups = "drop") %>%
+  mutate(raw_color = region_colors_light[region_group]
+         , trend_color = region_colors[region_group])
 
-ggplot(weighted_yield_region, aes(yr, weighted_yield, color = region_label)) +
-  geom_line(linewidth = 0.8) +
-  scale_color_brewer(palette = "Set1") +
-  labs(title = "Yield by region, 2002–2024"
-       , subtitle = "Production-weighted yield (total tons ÷ total harvested acres)"
-       , x = NULL, y = "Yield (tons per acre)", color = "Region") +
+ggplot(weighted_yield_region, aes(yr, weighted_yield)) +
+  geom_line(aes(color = raw_color), linewidth = 0.5) +
+  geom_smooth(aes(color = trend_color), method = "loess", se = FALSE, linewidth = 1.1) +
+  scale_color_identity() +
+  facet_wrap(~ region_group, scales = "fixed", ncol = 2, nrow = 3) +
+  labs(title = "Yield by region"
+       , subtitle = 'Production-weighted yield (total tons ÷ total harvested acres)'
+       , x = NULL, y = "Yield (tons per acre)") +
   theme_minimal() +
   theme(legend.position = "none"
       , plot.title = element_text(size = 16, face = "bold")
-      , plot.subtitle = element_text(size = 10, color = "grey40"))
+      , plot.subtitle = element_text(size = 10, color = "grey40")
+      , strip.text = element_text(face = "bold")
+      , axis.text = element_text(size = 8)
+      , panel.spacing = unit(1, "lines"))
 ```
 
-Figure 6 shows a dramatic dip in Pinot Noir yield in 2020—from roughly 62,000 to 40,000 tons statewide—while Pinot Gris and Chardonnay barely register the disruption. This selective impact is consistent with wildfire smoke taint, which binds more readily to red wine grapes because of their extended skin-contact fermentation process than to white wine production; anecdotally, 2020 also drove some producers toward "white Pinot" as a workaround, itself a sign of the industry's adaptive capacity. 
+Figure 7 repeats the same weighted-yield calculation from Figure 6, this time faceted by Oregon's five wine-growing regions rather than by variety. Yield across nearly every region has held steady or trended upward, reinforcing our observation that, within the climate range Oregon has experienced so far, warming has generally not come at the cost of yield and in many regions it has coincided with higher yields overall.
 
-All varieties rebound to new all-time highs within three years. Indeed, outside of that one disrupted year, yield for Pinot Noir and the other key varieties has held steady or trended upward across regions, and the same holds when the data is cut by region instead of variety in Figure 7. The historical pattern demonstrates that, within the range of GDD and heat stress Oregon has experienced thus far, warmer conditions have generally corresponded with higher yields per acre across nearly every variety and region. 
+Umpqua is the one region that breaks this pattern. To examine this trend in more detail, Table 1 (below) lays out four growing-season climate metrics for each region, averaged over 2002–2024, with regions ordered from warmest to coolest. 
 
-However, warmer seasons can raise yield while simultaneously degrading the flavor and quality characteristics that define Oregon's premium wines, particularly Pinot Noir. 
+```{r region_climate_table}
+#| echo: false
+#| warning: false
+#| message: false
+#| tbl-cap: "Table 1: Average growing-season climate by region, 2002–2024, ranked warmest to coolest"
+region_climate_summary <- regional %>%
+  filter(!region_label %in% c("Eastern Oregon", "Other Region", "Other Oregon")
+         , yr >= 2002) %>%
+  distinct(region_label, yr, gdd_apr_sep, summer_tmax_mean, heat_stress_days, diurnal_range_ripening) %>%
+  group_by(region_label) %>%
+  summarise(
+    `Mean GDD (Apr-Sep)` = round(mean(gdd_apr_sep, na.rm = TRUE))
+    , `Mean summer high (°C)` = round(mean(summer_tmax_mean, na.rm = TRUE), 1)
+    , `Mean heat stress days` = round(mean(heat_stress_days, na.rm = TRUE), 1)
+    , `Mean ripening diurnal range (°C)` = round(mean(diurnal_range_ripening, na.rm = TRUE), 1)
+    , .groups = "drop"
+  ) %>%
+  arrange(desc(`Mean GDD (Apr-Sep)`)) %>%
+  rename(Region = region_label)
+
+knitr::kable(region_climate_summary)
+```
+
+Columbia River at Large is a clear outlier at the warm end, and the two Willamette Valley sub-regions anchor the cool end, with Rogue Valley and Umpqua occupying the middle of the range. We note that Umpqua ranks third of five regions by growing degree days, meaningfully warmer than either Willamette Valley sub-region, yet it has both the lowest-weighted yield of any region over 2002–2024 and by far the flattest yield trend over that period. In contrast, Columbia River at Large shows a yield trajectory that is consistent with other regions, indicating that the yield trend is not tied to temperature alone. Umpqua's yield story may be driven by other factors unrelated to the climate variables tracked by our dataset. Potential factors could include variety mix, vineyard scale, soil composition, or terrain complexity. We flag it here as a pattern worth further investigation rather than a settled finding.
+
+Our overall observation is that warmer temperatures appear to have limited or somewhat positive impact on yield. However, warmer seasons can raise yield while simultaneously degrading the flavor and quality characteristics that define Oregon's premium wines, particularly Pinot Noir.
 
 ## The quality concern hiding under a healthy yield trend
 
@@ -124,6 +236,7 @@ However, warmer seasons can raise yield while simultaneously degrading the flavo
 #| echo: false
 #| warning: false
 #| message: false
+#| fig-width: 7
 #| fig-cap: "Figure 8: Diurnal ripening temperature range, statewide average, 1981–2024, shown against the ideal 15–20°C range for Pinot Noir ripening"
 sw_climate <- statewide %>%
   distinct(yr, diurnal_range_ripening) %>%
@@ -146,9 +259,9 @@ ggplot(sw_climate, aes(yr, diurnal_range_ripening)) +
       , plot.subtitle = element_text(size = 10, color = "grey40"))
 ```
 
-Figure 8 demonstrates a diurnal range that has narrowed from roughly 17°C in the 1980s to roughly 15°C today, indicating that nights are warming faster than days. This is consistent with a pattern documented globally in the climate literature and generally attributed to changes in cloud cover trapping heat overnight [@ucs2022nights; @liu2024dtr]. This day-night temperature swing is a key mechanism behind Oregon's suitability for growing Pinot Noir: warm days build sugar, while cool nights slow the grape's respiration long enough to retain the acidity, color, and aromatics that define the variety [@kingestate2025; @ajev2012dtr]. Controlled experiments on Pinot Noir, specifically, have found that compressing this range alters organic acid metabolism and can suppress color accumulation, and a companion study found Pinot Noir was one of the varieties most sensitive to elevated diurnal temperature among the major red varieties tested [@frontiers2025bunchheating; @pmc2022highTemp].
+Figure 8 demonstrates a diurnal range that has narrowed from roughly 17°C in the 1980s to roughly 15°C today, indicating that nights are warming faster than days. This is consistent with a pattern documented globally in the climate literature and generally attributed to changes in cloud cover trapping heat overnight [@ucs2022nights; @liu2024dtr]. This day-night temperature swing is a key mechanism behind Oregon's suitability for growing Pinot Noir: warm days build sugar, while cool nights slow the grape's respiration long enough to retain complex acidity, color, and aromatic qualities in the grape [@ajev2012dtr]. Controlled experiments on Pinot Noir, specifically, have found that compressing this range alters organic acid metabolism and can suppress color accumulation, and a companion study found Pinot Noir was one of the varieties most sensitive to elevated diurnal temperature among the major red varieties tested [@frontiers2025bunchheating; @pmc2022highTemp].
 
-The narrowing diurnal range finding is a leading indicator worth flagging even though the problem has not yet surfaced in production or pricing data alone. This metric operates on wine quality through a physiological process that is more nuanced than heat-accumulation metrics alone. Thus, models built on yield alone will miss this leading indicator entirely. Future research could evaluate this risk through proxy indicators of wine quality such as price premiums or critic-score text mining.
+This narrowing diurnal range is a potential risk to wine *quality* that has not surfaced in the production metrics alone. Diurnal range operates on wine quality through a physiological process that is more nuanced than heat-accumulation metrics in isolation, and models built on yield alone will miss this leading indicator entirely. Future research could evaluate this risk through proxy indicators of wine quality such as price premiums or critic-score text mining.
 
 ## Predicting yield across the growing season
 
