@@ -20,6 +20,33 @@ statewide <- statewide %>%
   mutate(yield_derived = production_tons / acres_harvested, variety_label = str_trim(variety_label))
 
 key_varieties <- c("Pinot Noir", "Pinot Gris", "Chardonnay", "Riesling/White Riesling")
+
+variety_colors <- c(
+  "Pinot Noir" = "#b2182b"
+  , "Pinot Gris" = "#4393c3"
+  , "Chardonnay" = "#d6604d"
+  , "Riesling/White Riesling" = "#d4a017"
+  , "Other" = "#999999"
+)
+
+region_levels <- regional %>%
+  filter(!region_label %in% c("Eastern Oregon", "Other Region", "Other Oregon")) %>%
+  distinct(region_label) %>%
+  arrange(region_label) %>%
+  pull(region_label)
+
+region_colors <- setNames(
+  RColorBrewer::brewer.pal(max(3, length(region_levels)), "Set1")[seq_along(region_levels)]
+  , region_levels
+)
+
+lighten_color <- function(hex, amount = 0.65) {
+  rgb_val <- grDevices::col2rgb(hex) / 255
+  new_rgb <- rgb_val + (1 - rgb_val) * amount
+  grDevices::rgb(new_rgb[1], new_rgb[2], new_rgb[3])
+}
+variety_colors_light <- setNames(sapply(variety_colors, lighten_color), names(variety_colors))
+region_colors_light <- setNames(sapply(region_colors, lighten_color), names(region_colors))
 ```
 
 ## Oregon's growing reliance on Pinot Noir
@@ -46,14 +73,6 @@ labels_df <- variety_share %>%
   filter(yr == max(yr)) %>%
   ungroup()
 
-variety_colors <- c(
-  "Pinot Noir" = "#b2182b"
-  , "Pinot Gris" = "#4393c3"
-  , "Chardonnay" = "#d6604d"
-  , "Riesling/White Riesling" = "#d4a017"
-  , "Other" = "#999999"
-)
-
 variety_share %>%
   mutate(is_pinot = variety_group == "Pinot Noir") %>%
   ggplot(aes(yr, production_share_pct, color = variety_group, alpha = is_pinot, linewidth = is_pinot)) +
@@ -64,7 +83,7 @@ variety_share %>%
       , nudge_x = 1
       , hjust = 0
       , size = 3.2
-      , segment.color = "grey70"
+      , segment.color = variety_colors_light
       , segment.size = 0.3
       , direction = "y"
       , show.legend = FALSE
@@ -127,6 +146,7 @@ ggplot(sw_climate, aes(yr, gdd_anom)) +
   geom_hline(yintercept = 0, color = "grey30", linewidth = 0.4) +
   scale_fill_manual(values = c(`TRUE` = "#b2182b", `FALSE` = "#2166ac"), guide = "none") +
   geom_vline(xintercept = break_year, linetype = "dashed", color = "grey40", linewidth = 0.6) +
+  annotate("text", x = break_year, y = -150, label = paste0("Structural shift begins in ", break_year), hjust = -0.15, vjust = 1, size = 3, color = "grey40") +
   labs(title = "Oregon's growing season is getting warmer"
        , subtitle = "Growing Degree Days (GDD) anomaly from the 1987–2024 mean"
        , x = NULL, y = "GDD (Apr–Sep) anomaly") +
