@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>analysis</title>
+<title>data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,17 +23,17 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="_04_analysis_files/libs/clipboard/clipboard.min.js"></script>
-<script src="_04_analysis_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="_04_analysis_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="_04_analysis_files/libs/quarto-html/popper.min.js"></script>
-<script src="_04_analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="_04_analysis_files/libs/quarto-html/anchor.min.js"></script>
-<link href="_04_analysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="_04_analysis_files/libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="_04_analysis_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="_04_analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="_04_analysis_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="_03_data_files/libs/clipboard/clipboard.min.js"></script>
+<script src="_03_data_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="_03_data_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="_03_data_files/libs/quarto-html/popper.min.js"></script>
+<script src="_03_data_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="_03_data_files/libs/quarto-html/anchor.min.js"></script>
+<link href="_03_data_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="_03_data_files/libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="_03_data_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="_03_data_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="_03_data_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -47,167 +47,13 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="analysis" class="level1">
-<h1>Analysis</h1>
-<section id="oregons-growing-reliance-on-pinot-noir" class="level2">
-<h2 class="anchored" data-anchor-id="oregons-growing-reliance-on-pinot-noir">Oregon’s growing reliance on Pinot Noir</h2>
-<div class="cell">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="_04_analysis_files/figure-html/pinot_dominance-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption>Figure 1: Statewide grape tonnage by variety, 1987–2024</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>Figure 1 demonstrates Pinot Noir’s growing share of statewide tonnage, from roughly 15% in 1990 to around 30% by 2020. This trend has continued to build, while other anchor varieties like Chardonnay and Riesling have declined sharply over the same period. Pinot Gris is one variety that counteracts this trend, growing from a negligible share in 1990 to a stable ~8% by 2010.</p>
-<p>However, the dramatic shift toward Pinot Noir has remained a dominant trend, suggesting that Oregon’s wine industry has increasingly concentrated on climate-sensitive Pinot varieties over exactly the same decades that have coincided with a pronounced shift in the region’s key climate indicators.</p>
-</section>
-<section id="evidence-of-a-warming-climate" class="level2">
-<h2 class="anchored" data-anchor-id="evidence-of-a-warming-climate">Evidence of a warming climate</h2>
-<div class="cell">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="_04_analysis_files/figure-html/gdd_statewide-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption>Figure 2: Growing degree day (GDD) anomaly relative to the 38-year average, overlaid with a 10-year rolling average</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>Growing degree days (GDDs) show a clear and sustained upward trend, with a level shift identified by a structural-break test around 2012.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="_04_analysis_files/figure-html/climate_indicators-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption>Figure 3: Six viticulture-relevant climate indicators, statewide average, 1987–2024, each with a linear trend and 95% confidence interval</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>Figure 3 summarizes six key viticultural climate indicators. Growing degree days, peak summer temperature, and heat stress days are all trending up with tight confidence intervals, demonstrating a warming signal is both real and steep. Spring frost days are essentially flat, a meaningful non-finding since it means the warming trend has not reduced the risk of a damaging frost event during spring bud break, even as summer heat accumulation climbs. October precipitation trends slightly upward but noisily, with no strong signal either way.</p>
-<p>The sixth indicator—ripening-season diurnal temperature range—is the one metric that moves in the opposite direction from the rest, and it does so specifically because it isn’t a simple byproduct of an overall upward heat trend. This finding is most directly relevant to Oregon’s growing dependence on Pinot Noir, since Pinot Noir relies on a wide day-night temperature swing during ripening to retain acidity and develop aromatic complexity—a mechanism we discussed in <a href="#background">Background</a>.</p>
-</section>
-<section id="how-the-climate-features-relate" class="level2">
-<h2 class="anchored" data-anchor-id="how-the-climate-features-relate">How the climate features relate</h2>
-<p>Several of these climate measures are closely related to aspects of the same underlying warming trend.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="_04_analysis_files/figure-html/climate_correlations-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption>Figure 4: Correlation matrix of annual climate features, statewide, 1987–2024</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>Figure 4 identifies three clusters of variables that appear to measure largely the same underlying phenomenon from different angles, rather than independent drivers:</p>
-<ol type="1">
-<li><strong>Spring frost risk:</strong> Frost risk days and coldest spring night are correlated at -0.91, which makes sense given one is a temperature reading and the other is a threshold-count derived from it.</li>
-<li><strong>Summer heat accumulation:</strong> Heat stress days and summer VPD are both correlated above 0.6 with all the GDD variables.</li>
-<li><strong>Fall precipitation:</strong> Precipitation measures move together above 0.4.</li>
-</ol>
-<p>We also note that diurnal ripening temperature range is negatively correlated with nearly every heat-related feature, consistent with the pattern described in <a href="#background">Background</a>, where nights warm faster than days as the season heats up overall, compressing the day-night swing. Additionally, growing-season precipitation is negatively correlated with GDD Apr-Sep (-0.11), indicating that hotter years also tend to be drier years overall.</p>
-<p>To resolve which variables to retain for modeling, we turn to variance inflation factors (VIF) to capture multi-variable overlap.</p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Variance Inflation Factors</caption>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Variable</th>
-<th style="text-align: right;">VIF</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Sep-Oct precip</td>
-<td style="text-align: right;">8.11</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Oct precip</td>
-<td style="text-align: right;">6.75</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Summer VPD</td>
-<td style="text-align: right;">6.43</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Coldest spring night</td>
-<td style="text-align: right;">4.38</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">GDD Apr-Sep</td>
-<td style="text-align: right;">4.13</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Frost risk days</td>
-<td style="text-align: right;">3.82</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Heat stress days</td>
-<td style="text-align: right;">2.90</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">GDD Veraison-Harvest</td>
-<td style="text-align: right;">2.34</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Diurnal temp range</td>
-<td style="text-align: right;">2.27</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>Sep-Oct precipitation and Oct precipitation come out highest, confirming we should not include both in the model. We elected to drop Sep-Oct precipitation, as we recognize Oct precipiatation specifically as an important botrytis / harvest-timing risk.</p>
-<p>Surprisingly, Summer VPD is <em>higher</em> than GDD Apr-Sep (6.43 vs.&nbsp;4.13), even though the correlation matrix showed VPD’s strongest pairwise correlation was with GDD. This tells us Summer VPD is well-explained by some <em>combination</em> of GDD Apr-Sep, heat stress days, and ripening temp range together, rather than by a strong individual pairwise correlation with any one of them. We elect to drop GDD Apr-Sep and keep Summer VPD, as it is the more direct measure of vine water stress.</p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<caption>Variance Inflation Factors</caption>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Variable</th>
-<th style="text-align: right;">VIF</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Coldest spring night</td>
-<td style="text-align: right;">4.18</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Frost risk days</td>
-<td style="text-align: right;">3.81</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Summer VPD</td>
-<td style="text-align: right;">3.71</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Heat stress days</td>
-<td style="text-align: right;">2.66</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">GDD Veraison-Harvest</td>
-<td style="text-align: right;">2.12</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Diurnal temp range</td>
-<td style="text-align: right;">1.31</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Oct precip</td>
-<td style="text-align: right;">1.15</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>All remaining VIFs fall under a conservative threshold of VIF&lt;5. Our retained predictor set going into the modeling stage is:</p>
+<section id="data" class="level1">
+<h1>Data</h1>
+<section id="data-sources" class="level2">
+<h2 class="anchored" data-anchor-id="data-sources">Data sources</h2>
+<p><strong>Oregon wine production and pricing</strong> data comes from the Oregon Vineyard and Winery Annual Reports, conducted since 1981 by various research groups and currently maintained by the University of Oregon <span class="citation" data-cites="oregonwinecensus">[@oregonwinecensus]</span>. Reports prior to 2017 exist only as scanned &amp; digital PDF documents and were ingested using AWS Textract; later years were ingested directly from structured spreadsheets.</p>
+<p><strong>Climate data</strong> was retrieved from the PRISM Climate Group, maintained by Oregon State University. PRISM provides daily gridded temperature and precipitation observations across the continental United States <span class="citation" data-cites="prism2026">[@prism2026]</span>. We retrieved daily observations from 1981-2024 across all 23 federally-recognized AVAs in Oregon. Zonal statistics were produced for each AVA by averaging the raster grid within each AVA boundary using the Python rasterstats library. AVA boundaries were defined by shapefiles obtained from the Alcohol and Tobacco Tax and Trade Bureau (TTB), which were converted to GeoJSON prior to their use in the ingestion script.</p>
+<p>From the daily climate data, we derived a set of features chosen specifically for their relevance to viticulture, rather than working with raw daily temperature and precipitation directly.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -222,35 +68,93 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td>Frost risk days</td>
-<td>Count of days below freezing during the April–May bud-break window</td>
+<td>Count of days below freezing, annually and during the April–May bud-break window</td>
 </tr>
 <tr class="even">
 <td>Coldest spring night</td>
 <td>Minimum recorded temperature during spring bud-break</td>
 </tr>
 <tr class="odd">
-<td>GDD (Véraison–Harvest)</td>
-<td>Accumulated heat above a 10°C (50°F) base during July 15–October 15 “véraison-to-harvest” window</td>
+<td>Growing degree days (GDD)</td>
+<td>Accumulated heat above a 10°C (50°F) base, April–September (Winkler index), plus a April–October variant and a July 15–October 15 “véraison-to-harvest” window</td>
 </tr>
 <tr class="even">
 <td>Heat stress days</td>
 <td>Count of days with a maximum temperature above 35°C (95°F) during the growing season</td>
 </tr>
 <tr class="odd">
-<td>Summer VPD</td>
-<td>A measure of atmospheric dryness / evaporative demand during July–August</td>
+<td>Vapor pressure deficit (VPD)</td>
+<td>A measure of atmospheric dryness / evaporative demand, computed for summer (July–August) and ripening (August–September) windows</td>
 </tr>
 <tr class="even">
 <td>Diurnal temperature range (ripening)</td>
 <td>Average day-night temperature swing during August–September, the period when grapes develop their sugar, color, and acidity</td>
 </tr>
 <tr class="odd">
-<td>Harvest precipitation (October)</td>
-<td>Total precipitation in October</td>
+<td>Harvest precipitation</td>
+<td>Total precipitation in October, and in the September–October window</td>
 </tr>
 </tbody>
 </table>
-<p>Note that GDD Apr-Sep itself remains central to the <em>descriptive</em> climate trends in Figures 2–3 above; it is excluded only from the predictive feature set, where its information is substantially redundant with the other retained heat measures.</p>
+</section>
+<section id="data-engineering-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="data-engineering-pipeline">Data engineering pipeline</h2>
+<p>Climate and production data were ingested on a recurring Amazon Web Services (AWS) batch pipeline (one task per AVA), computed into region- and statewide-level summaries, and stored in a PostgreSQL database hosted on Railway. AWS was chosen specifically for the production-data side of the pipeline, as reconstructing tables from PDF reports required routing each report era through separate Textract-based parsers due to varied report formats, column layouts, and label conventions. For the climate data, daily PRISM rasters were cached prior to computing zonal statistics, which were then written to the database via an idempotent upsert. Running this pipeline on AWS Batch / Fargate Spot allowed each AVA to be processed as a parallel, independently retriable job, though Spot interruptions during the original run caused some days to be missed; these were identified and backfilled in a final pass before the analysis tables were built.</p>
+<p>Two analysis-ready tables were constructed on top of the raw data:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Panel</th>
+<th>Coverage</th>
+<th>Grain</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Regional panel</td>
+<td>1987-2024</td>
+<td>One row per region x variety x year</td>
+<td>Yield modeling and region-level comparisons</td>
+</tr>
+<tr class="even">
+<td>Statewide panel</td>
+<td>1987-2024</td>
+<td>One row per variety x year</td>
+<td>Long-run varietal-mix analysis where regional detail is unnecessary</td>
+</tr>
+</tbody>
+</table>
+<p>Both panels begin in 1987, rather than 1981, because of limitations in the production data. While the full PRISM climate dataset was available from 1981 for all AVAs, the underlying wine census reports for 1981-1986 do not contain the area-by-variety breakdown tables needed to reconstruct regional variety data. These reports <em>do</em> contain bearing and non-bearing acreage by county, which could in principle be aggregated to the region level for an acreage-only (not variety-level) time series; we did not pursue this, and instead clipped both panels to 1987 onward to keep the regional and statewide tables consistent.</p>
+<p>Region-variety combinations were filtered to those with at least 20 years of historical data and zero-production / zero-harvest rows were dropped. This reduced the original ~1,300 region-variety-year observations to ~990 in the regional panel.</p>
+<p>The analysis tables were exported to Parquet files, which are used as the final data references for this report to preserve reproducibility. Our long-term goal is to make the underlying database publicly available, but this is a continued work in progress.</p>
+</section>
+<section id="ethical-considerations" class="level2">
+<h2 class="anchored" data-anchor-id="ethical-considerations">Ethical considerations</h2>
+<p>A few ethical considerations shaped how we approached this dataset:</p>
+<ol type="1">
+<li><strong>Regional underrepresentation:</strong> Underlying wine census data is reported by region, not by individual vineyard or winery, and is a voluntary industry survey rather than a full census. We recognize that this led to underrepresentation for some counties in some years.</li>
+<li><strong>Diversity and inclusion gaps among Oregon wine producers:</strong> Because there are very few minority-owned wineries in Oregon—our research turned up only two Native-owned wineries statewide—there is a real possibility that patterns related to these ownership demographics are invisible in this dataset. The effect of climate may have a disproportionate impact on some groups over others, but data was never collected that could surface these patterns.</li>
+<li><strong>Impact of immigration on Oregon wine production:</strong> Recent immigration policy has affected farmworkers and their families in ways that are impossible to quantify from production statistics alone. The truth is that Oregon wine production relies heavily on seasonal immigrant labor, and the raw production numbers do not tell the human story of these populations who are increasingly at risk in American society.</li>
+</ol>
+<p>We treat this dataset as a record of production and climate outcomes only, not as a complete picture of the people who participate in the industry that these outcomes describe.</p>
+</section>
+<section id="data-quality-caveats" class="level2">
+<h2 class="anchored" data-anchor-id="data-quality-caveats">Data quality caveats</h2>
+<p>We would like to provide transparency with respect to some key tradeoffs in our data collection:</p>
+<ul>
+<li><strong>Pre-2002 regional variety data is reconstructed, not directly reported.</strong> From 1987–2001, the industry reports at the statewide level did not break variety out by region; those years were reconstructed by aggregating county-level figures up to reporting regions. North Willamette Valley acreage, for example, is undercounted by roughly 15–20% for years before 1999 because the source area tables for that era only list major counties. This undercount only affects the variety-level breakdown for that region; the “all varieties” total is accurate. We treat pre-2002 regional findings with corresponding caution throughout this report and do not present county-aggregated reconstructions as precise counts.</li>
+<li><strong>Regional and statewide panels begin in 1987, not 1981, despite full climate coverage back to 1981</strong>: As described above, this is driven entirely by gaps in the wine production data source tables, not by any limitation in the climate data.</li>
+<li><strong>Price per ton (<code>PRI_01</code>) is only available at the region level from 2010 onward.</strong> This is a genuine limitation of the source data and constrains how far back any price-based analysis can go. Additionally, because price is affected by many factors, of which climate is only one, our analysis centers mainly around production data rather than price data.</li>
+<li><strong>The wine census is self-reported and voluntary, not a full census.</strong> We treat year-to-year volatility in the raw production series with more caution than the smoothed, multi-year trends.</li>
+</ul>
+<p>None of these caveats change our core findings, which are drawn primarily from long-term trends and the more reliable 2002–2024 window and from the climate data which has no comparable gaps. PRISM provides complete daily coverage for all 23 AVAs across the full 1981–2024 period.</p>
 </section>
 </section>
 

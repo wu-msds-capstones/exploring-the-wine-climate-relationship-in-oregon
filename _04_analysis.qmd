@@ -55,6 +55,7 @@ region_colors_light <- setNames(sapply(region_colors, lighten_color), names(regi
 #| echo: false
 #| warning: false
 #| message: false
+#| fig-width: 7
 #| fig-cap: "Figure 1: Statewide grape tonnage by variety, 1987–2024"
 variety_share <- statewide %>%
   filter(!is.na(production_share_pct)
@@ -112,6 +113,7 @@ However, the dramatic shift toward Pinot Noir has remained a dominant trend, sug
 #| echo: false
 #| warning: false
 #| message: false
+#| fig-width: 7
 #| fig-cap: "Figure 2: Growing degree day (GDD) anomaly relative to the 38-year average, overlaid with a 10-year rolling average"
 sw_climate <- statewide %>%
   distinct(
@@ -162,6 +164,7 @@ Growing degree days (GDDs) show a clear and sustained upward trend, with a level
 #| echo: false
 #| warning: false
 #| message: false
+#| fig-width: 7
 #| fig-cap: "Figure 3: Six viticulture-relevant climate indicators, statewide average, 1987–2024, each with a linear trend and 95% confidence interval"
 sw_climate %>%
   select(yr
@@ -206,6 +209,7 @@ Several of these climate measures are closely related to aspects of the same und
 #| echo: false
 #| warning: false
 #| message: false
+#| fig-width: 7
 #| fig-cap: "Figure 4: Correlation matrix of annual climate features, statewide, 1987–2024"
 # Aggregate to one row per year (mean across regions) before computing correlations
 ry <- regional %>%
