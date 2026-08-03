@@ -1,0 +1,37 @@
+region_label,variety_label,group_n,sample_weight
+Columbia River at Large,Pinot Gris,20,1.43
+South Willamette Valley,Merlot,20,1.43
+Rogue Valley,Pinot Blanc,21,1.36
+North Willamette Valley,Pinot Blanc,21,1.36
+Umpqua,Pinot Gris,23,1.24
+Columbia River at Large,Gewurztraminer,24,1.19
+Columbia River at Large,Merlot,25,1.14
+Umpqua,Merlot,25,1.14
+Rogue Valley,Merlot,25,1.14
+Umpqua,Cabernet Savignon,27,1.06
+North Willamette Valley,Cabernet Savignon,28,1.02
+North Willamette Valley,Riesling/White Riesling,30,0.95
+Columbia River at Large,Chardonnay,30,0.95
+North Willamette Valley,Pinot Gris,30,0.95
+Columbia River at Large,Pinot Noir,30,0.95
+Umpqua,Chardonnay,31,0.92
+Umpqua,Gewurztraminer,31,0.92
+South Willamette Valley,Riesling/White Riesling,31,0.92
+South Willamette Valley,Chardonnay,31,0.92
+Umpqua,Pinot Noir,31,0.92
+South Willamette Valley,Pinot Noir,31,0.92
+South Willamette Valley,Pinot Gris,31,0.92
+South Willamette Valley,Gewurztraminer,31,0.92
+Columbia River at Large,Cabernet Savignon,31,0.92
+South Willamette Valley,Cabernet Savignon,31,0.92
+Rogue Valley,Riesling/White Riesling,31,0.92
+Rogue Valley,Pinot Noir,31,0.92
+Rogue Valley,Pinot Gris,31,0.92
+Rogue Valley,Gewurztraminer,31,0.92
+Rogue Valley,Chardonnay,31,0.92
+Rogue Valley,Cabernet Savignon,31,0.92
+North Willamette Valley,Pinot Noir,31,0.92
+North Willamette Valley,Gewurztraminer,31,0.92
+North Willamette Valley,Chardonnay,31,0.92
+Columbia River at Large,Riesling/White Riesling,31,0.92
+Umpqua,Riesling/White Riesling,31,0.92

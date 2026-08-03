@@ -2,6 +2,10 @@
 
 ```{r setup-analysis}
 #| include: false
+#| echo: false
+#| warning: false
+#| message: false
+
 library(arrow)
 library(tidyverse)
 library(ggplot2)

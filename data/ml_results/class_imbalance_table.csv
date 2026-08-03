@@ -1,0 +1,14 @@
+group,n_rows,dimension,share_pct
+Pinot Blanc,42,variety_label,4.1
+Merlot,95,variety_label,9.2
+Pinot Gris,135,variety_label,13.1
+Cabernet Savignon,148,variety_label,14.4
+Gewurztraminer,148,variety_label,14.4
+Chardonnay,154,variety_label,15.0
+Pinot Noir,154,variety_label,15.0
+Riesling/White Riesling,154,variety_label,15.0
+Columbia River at Large,191,region_label,18.5
+Umpqua,199,region_label,19.3
+North Willamette Valley,202,region_label,19.6
+South Willamette Valley,206,region_label,20.0
+Rogue Valley,232,region_label,22.5
