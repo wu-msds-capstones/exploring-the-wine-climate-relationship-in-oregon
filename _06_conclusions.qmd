@@ -65,3 +65,25 @@ Several limitations shape how far these findings should be read. Our usable mach
 ## Future work
 
 The honest answer to our original research question is that Oregon's climate-wine relationship has evolved in a way that is currently invisible in the production data, and will most plausibly first appear in the fruit quality of the state's most heat-sensitive, most heavily planted variety. That is precisely the risk this project's founding motivation, building a public, climate-linked Oregon wine dataset where none currently exists, set out to help detect, and precisely where we would point future work: extending this model to a genuine quality proxy, such as price premium or critic-score data, rather than yield alone, disaggregating the thin varieties our current sample cannot yet characterize with confidence as more years of data accumulate, and extending the comparison to California and Washington that our original proposal envisioned but our first-phase data constraints did not yet allow
+
+```{r variety-summary-table}
+#| echo: false
+#| warning: false
+#| message: false
+ml_varieties <- c("Pinot Blanc", "Merlot", "Pinot Gris", "Cabernet Savignon",
+                   "Gewurztraminer", "Riesling/White Riesling", "Chardonnay", "Pinot Noir")
+
+variety_summary <- regional %>%
+  filter(!is.na(yield_derived), !is.na(acres_harvested), acres_harvested > 0
+         , !region_label %in% c("Eastern Oregon", "Other Region", "Other Oregon")
+         , variety_label %in% ml_varieties) %>%
+  group_by(variety_label) %>%
+  summarise(
+    `Avg yield (tons/acre)` = round(mean(yield_derived, na.rm = TRUE), 2)
+    , `Avg harvested acres`  = round(mean(acres_harvested, na.rm = TRUE), 0)
+    , .groups = "drop"
+  ) %>%
+  arrange(desc(`Avg harvested acres`))
+
+knitr::kable(variety_summary, col.names = c("Variety", "Avg yield (tons/acre)", "Avg harvested acres"))
+```
