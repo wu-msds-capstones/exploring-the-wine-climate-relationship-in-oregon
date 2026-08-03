@@ -57,7 +57,6 @@ region_colors_light <- setNames(sapply(region_colors, lighten_color), names(regi
 ## Production and yield have, so far, kept climbing
 
 ```{r total_production}
-#| include: false
 #| echo: false
 #| warning: false
 #| message: false
@@ -93,7 +92,6 @@ Figure 5 plots statewide production-weighted yield (total tons produced divided 
 We note a clear interruption in 2020, corresponding to a season with severe wildfire smoke taint that resulted in a substantial share of unusable fruit among that year's harvest. This represents a discrete event rather than a gradual climate-trend effect.
 
 ```{r yield_by_variety}
-#| include: false
 #| echo: false
 #| warning: false
 #| message: false
@@ -130,7 +128,6 @@ ggplot(weighted_yield_variety, aes(yr, weighted_yield)) +
       , panel.spacing = unit(1, "lines"))
 ```
 ```{r vals_for_inline_calcs}
-#| include: false
 #| echo: false
 #| warning: false
 #| message: false
@@ -388,26 +385,57 @@ Figure 10 breaks the same residuals down by variety instead of by stage. The mod
 #| message: false
 #| fig-width: 7
 #| fig-cap: "Figure 11: Top 5 permutation-importance features by stage"
+var_labels <- c(
+  "gdd_apr_sep"            = "GDD (Apr–Sep)",
+  "gdd_apr_oct"            = "GDD (Apr–Oct)",
+  "gdd_veraison_harvest"   = "GDD (Veraison–Harvest)",
+  "frost_days_spring"      = "Spring Frost Days",
+  "frost_days_annual"      = "Annual Frost Days",
+  "heat_stress_days"       = "Heat Stress Days (>35°C)",
+  "coldest_spring_night_c" = "Coldest Spring Night (°C)",
+  "winter_tmin_jan_feb"    = "Winter Tmin (Jan–Feb)",
+  "summer_tmax_mean"       = "Summer Tmax Mean (°C)",
+  "diurnal_range_ripening" = "Diurnal Range (Ripening)",
+  "gs_ppt_mm"              = "Growing Season Precip (mm)",
+  "oct_ppt_mm"             = "October Precip (mm)",
+  "sep_oct_ppt_mm"         = "Sep–Oct Precip (mm)",
+  "spring_ppt_mm"          = "Spring Precip (mm)",
+  "annual_ppt_mm"          = "Annual Precip (mm)",
+  "vpd_max_summer"         = "Max Summer VPD",
+  "vpd_max_ripening"       = "Max Ripening VPD",
+  "variety_label"          = "Variety Label"
+)
+
 stage_importance <- read_parquet("data/ml_results/stage_importance.parquet") %>%
   mutate(stage = dplyr::recode(stage,
     stage1_spring  = "Stage 1: Spring",
     stage2_summer  = "Stage 2: Summer",
     stage3_harvest = "Stage 3: Harvest"
-  ))
+  ),
+  Variable_clean = dplyr::recode(Variable, !!!var_labels)
+  )
 
 stage_importance %>%
   group_by(stage) %>%
   slice_max(Importance, n = 5) %>%
   ungroup() %>%
-  mutate(Variable_key = paste(stage, Variable, sep = "___")) %>%
+  mutate(Variable_key = paste(stage, Variable_clean, sep = "___")) %>%
   ggplot(aes(x = reorder(Variable_key, Importance), y = Importance)) +
-  geom_col(fill = "#4A7CC7") +
+  geom_col(fill= "#8B1E3F")+
   coord_flip() +
   scale_x_discrete(labels = function(x) sub("^.*___", "", x)) +
-  facet_wrap(~stage, scales = "free_y") +
+  facet_wrap(~stage, scales = "free_y", ncol = 1) +
   labs(title = "Which features actually move the model's predictions",
        x = NULL, y = "Importance (RMSE increase when permuted)") +
-  theme_minimal()
+  theme_minimal()+
+    theme(
+    panel.spacing.y = unit(1.2, "lines"),
+    strip.text = element_text(face = "bold", size = 11, margin = margin(b = 6)),
+    axis.text.y = element_text(size = 9, color = "black"),
+    axis.text.x = element_text(size = 8.5, color = "black"),
+    axis.title.x = element_text(size = 10, margin = margin(t = 10)),
+    plot.title = element_text(face = "bold", size = 13, margin = margin(b = 10))
+  )
 ```
 
 Figure 11 shows why the residual patterns in Figure 10 look the way they do. In the spring model, variety identity dominates by a wide margin, unsurprising given that the only climate features available at that point, frost risk and coldest spring night, showed no meaningful correlation with yield in our statistical analysis. With almost no useful climate signal to draw on, the model falls back on which variety it is looking at as its primary basis for prediction.
