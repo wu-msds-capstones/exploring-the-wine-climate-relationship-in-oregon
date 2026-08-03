@@ -19,16 +19,24 @@ narrowing in a way no yield-only model can detect.
 
 ## Repository structure
 ├── _01_intro.qmd Introduction and problem statement
+
 ├── _02_background.qmd Prior research and motivation
+
 ├── _03_data.qmd Data sources, ingestion pipeline, ethics
+
 ├── _04_analysis.qmd Statistical and correlation analysis
+
 ├── _05_results.qmd Yield/climate findings and ML results
+
 ├── _06_conclusions.qmd Synthesis and future work
+
 ├── _07_references.qmd Bibliography
+
 ├── capstone.qmd Manuscript entry point (assembles the above)
+
 ├── data/ Analysis-ready climate and production panels
+
 ├── data/ml_results/ Model outputs (metrics, importance, predictions)
-└── poster/ Conference poster (PDF)
 
 ## Data sources
 
