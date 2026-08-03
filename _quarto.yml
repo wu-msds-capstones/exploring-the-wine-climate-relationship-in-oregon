@@ -9,8 +9,9 @@ manuscript:
 
 format: 
   html:
+    output-file: index.html
     theme:
       light: lightly
       dark: darkly
     code-fold: true
-    code_summary: "Show code"
+    code-summary: "Show code"
