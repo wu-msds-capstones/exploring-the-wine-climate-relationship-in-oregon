@@ -163,7 +163,7 @@ get_pct_change <- function(variety) {
 
 Figure 6 breaks down the production-weighted yield for each of the four leading varietals: Chardonnay, Pinot Gris, Pinot Noir, and Riesling. Each panel repeats the same visual structure as Figure 5: a thin line for the raw annual value and a bold smoothed trend layered on top.
 
-We see a dramatic dip in Pinot Noir yield in 2020 while Pinot Gris and Chardonnay barely register the disruption. This selective impact is consistent with wildfire smoke taint, which binds more readily to red wine grapes because of their extended skin-contact fermentation process than to white wine production; anecdotally, 2020 also drove some producers toward "white Pinot" as a workaround, itself a sign of the industry's adaptive capacity.
+We see a dramatic dip in Pinot Noir yield in 2020 while Pinot Gris and Chardonnay barely register the disruption comparatively. This selective impact is consistent with wildfire smoke taint, which binds more readily to red wine grapes because of their extended skin-contact fermentation process than to white wine production; anecdotally, 2020 also drove some producers toward "white Pinot" as a workaround, itself a sign of the industry's adaptive capacity.
 
 All varieties rebound to new all-time highs within three years. Indeed, outside of that one disrupted year, yield for Pinot Noir and the other key varieties has held steady or trended upward statewide, and the same holds when the data is cut by region instead of variety in Figure 7 (below). The historical pattern demonstrates that, within the range of GDD and heat stress Oregon has experienced thus far, warmer conditions have generally corresponded with higher yields per acre across nearly every variety and region.
 
