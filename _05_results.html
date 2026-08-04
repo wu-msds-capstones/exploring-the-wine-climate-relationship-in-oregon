@@ -2,16 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.7.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>results</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -33,10 +30,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="_05_results_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="_05_results_files/libs/quarto-html/anchor.min.js"></script>
 <link href="_05_results_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="_05_results_files/libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="_05_results_files/libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="_05_results_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="_05_results_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="_05_results_files/libs/bootstrap/bootstrap-efbb37e9afcc02144ebbc7afd12a776f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="_05_results_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -377,6 +374,16 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="model-reliance-on-variety-identity-vs.-climate-features" class="level2">
 <h2 class="anchored" data-anchor-id="model-reliance-on-variety-identity-vs.-climate-features">Model reliance on variety identity vs.&nbsp;climate features</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="_05_results_files/figure-html/importance-plot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Figure 11: Top 5 permutation-importance features by stage</figcaption>
+</figure>
+</div>
+</div>
+</div>
 <p>Figure 11 shows why the residual patterns in Figure 10 look the way they do. In the spring model, variety identity dominates by a wide margin, unsurprising given that the only climate features available at that point, frost risk and coldest spring night, showed no meaningful correlation with yield in our statistical analysis. With almost no useful climate signal to draw on, the model falls back on which variety it is looking at as its primary basis for prediction.</p>
 <p>Variety identity remains the single most important feature in the summer model as well, but growing degree days now emerges as a substantial contributor alongside it, rather than a negligible one. This lines up directly with Table 3: the summer model’s jump in R² is attributable specifically to GDD becoming informative once it enters the feature set, not to any change in how much the model relies on variety. Put together, Figures 10 and 11 tell a consistent story: variety identity is doing real work throughout, GDD adds a genuine, if modest, second signal starting in the summer model, and the later, more granular harvest-stage features neither reduce the model’s reliance on variety nor add a comparable climate signal of their own.</p>
 </section>
@@ -523,14 +530,13 @@ ul.task-list li input[type="checkbox"] {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
