@@ -19,17 +19,21 @@ regional  <- read_parquet("data/analysis_panel_regional.parquet")
 statewide <- read_parquet("data/analysis_panel_statewide.parquet")
 
 regional <- regional %>%
-  mutate(yield_derived = production_tons / acres_harvested, variety_label = str_trim(variety_label))
+  mutate(yield_derived = production_tons / acres_harvested
+         , variety_label = str_trim(variety_label)
+         , variety_label = if_else(variety_label == "Riesling/White Riesling", "Riesling", variety_label))
 statewide <- statewide %>%
-  mutate(yield_derived = production_tons / acres_harvested, variety_label = str_trim(variety_label))
+  mutate(yield_derived = production_tons / acres_harvested
+         , variety_label = str_trim(variety_label)
+         , variety_label = if_else(variety_label == "Riesling/White Riesling", "Riesling", variety_label))
 
-key_varieties <- c("Pinot Noir", "Pinot Gris", "Chardonnay", "Riesling/White Riesling")
+key_varieties <- c("Pinot Noir", "Pinot Gris", "Chardonnay", "Riesling")
 
 variety_colors <- c(
   "Pinot Noir" = "#b2182b"
   , "Pinot Gris" = "#4393c3"
   , "Chardonnay" = "#d6604d"
-  , "Riesling/White Riesling" = "#d4a017"
+  , "Riesling" = "#d4a017"
   , "Other" = "#999999"
 )
 
