@@ -436,7 +436,6 @@ stage_importance %>%
     axis.title.x = element_text(size = 10, margin = margin(t = 10)),
     plot.title = element_text(face = "bold", size = 13, margin = margin(b = 10))
   )
-
 ```
 
 Figure 11 shows why the residual patterns in Figure 10 look the way they do. In the spring model, variety identity dominates by a wide margin, unsurprising given that the only climate features available at that point, frost risk and coldest spring night, showed no meaningful correlation with yield in our statistical analysis. With almost no useful climate signal to draw on, the model falls back on which variety it is looking at as its primary basis for prediction.

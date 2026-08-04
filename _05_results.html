@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>results</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="_05_results_files/libs/clipboard/clipboard.min.js"></script>
+<script src="_05_results_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="_05_results_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="_05_results_files/libs/quarto-html/popper.min.js"></script>
+<script src="_05_results_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="_05_results_files/libs/quarto-html/anchor.min.js"></script>
+<link href="_05_results_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="_05_results_files/libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="_05_results_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="_05_results_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="_05_results_files/libs/bootstrap/bootstrap-efbb37e9afcc02144ebbc7afd12a776f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="results" class="level1">
+<h1>Results</h1>
+<section id="production-and-yield-have-so-far-kept-climbing" class="level2">
+<h2 class="anchored" data-anchor-id="production-and-yield-have-so-far-kept-climbing">Production and yield have, so far, kept climbing</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="_05_results_files/figure-html/total_production-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Figure 5: Statewide production-weighted yield, 1987–2024, with separate smoothed trends fit around 2002 reporting methodology shift</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Figure 5 plots statewide production-weighted yield (total tons produced divided by total acres harvested) for every year from 1987 to 2024. This isolates how productive Oregon’s vineyard acreage has become over time, independent of how much new acreage has been planted. The thin gray line traces the raw annual totals as reported while the bold red trend line summarizes the underlying pattern using a smoothed fit. Harvested acreage expanded by roughly the same order of magnitude as raw production did over this period, which means most of the industry’s growth has come from planting more acres rather than from getting more productive per acre. Yield itself has seen modest growth, averaging around ~2.5 tons per acre in 1990s and 2000s and settling closer to ~3 tons per acre in the most recent decade.</p>
+<p>We note a clear interruption in 2020, corresponding to a season with severe wildfire smoke taint that resulted in a substantial share of unusable fruit among that year’s harvest. This represents a discrete event rather than a gradual climate-trend effect.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="_05_results_files/figure-html/yield_by_variety-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Figure 6: Production-weighted yield by <strong>variety</strong></figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Figure 6 breaks down the production-weighted yield for each of the four leading varietals: Chardonnay, Pinot Gris, Pinot Noir, and Riesling. Each panel repeats the same visual structure as Figure 5: a thin line for the raw annual value and a bold smoothed trend layered on top.</p>
+<p>We see a dramatic dip in Pinot Noir yield in 2020 while Pinot Gris and Chardonnay barely register the disruption comparatively. This selective impact is consistent with wildfire smoke taint, which binds more readily to red wine grapes because of their extended skin-contact fermentation process than to white wine production; anecdotally, 2020 also drove some producers toward “white Pinot” as a workaround, itself a sign of the industry’s adaptive capacity.</p>
+<p>All varieties rebound to new all-time highs within three years. Indeed, outside of that one disrupted year, yield for Pinot Noir and the other key varieties has held steady or trended upward statewide, and the same holds when the data is cut by region instead of variety in Figure 7 (below). The historical pattern demonstrates that, within the range of GDD and heat stress Oregon has experienced thus far, warmer conditions have generally corresponded with higher yields per acre across nearly every variety and region.</p>
+<p>However, this pattern is not uniform across varieties. Pinot Gris demonstrated the largest yield gain of the four key varieties (roughly a 35% increase), with Pinot Noir close behind (44%) and Chardonnay more modest (34%). In contrast, Riesling shows essentially no relationship between yield and warmth of the growing season (-2%). This could be attributed to the fact that its production is concentrated largely in the cooler North Willamette Valley that rarely experiences the warmer end of the state’s climate range.</p>
+<p>We also note that Pinot Gris’ rising share of statewide production (Figure 1) is attributable not not only to an increasing share of planted acres, but also because this variety appears to yield higher volumes in the warmer seasons that are becoming increasingly common in Oregon.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="_05_results_files/figure-html/yield_by_region-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Figure 7: Production-weighted yield by <strong>region</strong></figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Figure 7 repeats the same weighted-yield calculation from Figure 6, this time faceted by Oregon’s five wine-growing regions rather than by variety. Yield across nearly every region has held steady or trended upward, reinforcing our observation that, within the climate range Oregon has experienced so far, warming has generally not come at the cost of yield and in many regions it has coincided with higher yields overall.</p>
+<p>Umpqua is the one region that breaks this pattern. To examine this trend in more detail, Table 1 (below) lays out four growing-season climate metrics for each region, averaged over 2002–2024, with regions ordered from warmest to coolest.</p>
+<div class="cell" data-tbl-cap="Table 1: Average growing-season climate by region, 2002–2024, ranked warmest to coolest">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Table 1: Average growing-season climate by region, 2002–2024, ranked warmest to coolest</caption>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 15%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Region</th>
+<th style="text-align: right;">Mean GDD (Apr-Sep)</th>
+<th style="text-align: right;">Mean summer high (°C)</th>
+<th style="text-align: right;">Mean heat stress days</th>
+<th style="text-align: right;">Mean ripening diurnal range (°C)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Columbia River at Large</td>
+<td style="text-align: right;">1363</td>
+<td style="text-align: right;">30.8</td>
+<td style="text-align: right;">11.8</td>
+<td style="text-align: right;">16.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rogue Valley</td>
+<td style="text-align: right;">1301</td>
+<td style="text-align: right;">30.6</td>
+<td style="text-align: right;">9.9</td>
+<td style="text-align: right;">17.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Umpqua</td>
+<td style="text-align: right;">1212</td>
+<td style="text-align: right;">28.9</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">16.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">North Willamette Valley</td>
+<td style="text-align: right;">1162</td>
+<td style="text-align: right;">27.8</td>
+<td style="text-align: right;">4.3</td>
+<td style="text-align: right;">14.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">South Willamette Valley</td>
+<td style="text-align: right;">1154</td>
+<td style="text-align: right;">28.6</td>
+<td style="text-align: right;">5.4</td>
+<td style="text-align: right;">16.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Columbia River at Large is a clear outlier at the warm end, and the two Willamette Valley sub-regions anchor the cool end, with Rogue Valley and Umpqua occupying the middle of the range. We note that Umpqua ranks third of five regions by growing degree days, meaningfully warmer than either Willamette Valley sub-region, yet it has both the lowest-weighted yield of any region over 2002–2024 and by far the flattest yield trend over that period. In contrast, Columbia River at Large shows a yield trajectory that is consistent with other regions, indicating that the yield trend is not tied to temperature alone. Umpqua’s yield story may be driven by other factors unrelated to the climate variables tracked by our dataset. Potential factors could include variety mix, vineyard scale, soil composition, or terrain complexity. We flag it here as a pattern worth further investigation rather than a settled finding.</p>
+<p>Our overall observation is that warmer temperatures appear to have limited or somewhat positive impact on yield. However, warmer seasons can raise yield while simultaneously degrading the flavor and quality characteristics that define Oregon’s premium wines, particularly Pinot Noir.</p>
+</section>
+<section id="the-quality-concern-hiding-under-a-healthy-yield-trend" class="level2">
+<h2 class="anchored" data-anchor-id="the-quality-concern-hiding-under-a-healthy-yield-trend">The quality concern hiding under a healthy yield trend</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="_05_results_files/figure-html/diurnal_shift-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Figure 8: Diurnal ripening temperature range, statewide average, 1981–2024, shown against the ideal 15–20°C range for Pinot Noir ripening</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Figure 8 demonstrates a diurnal range that has narrowed from roughly 17°C in the 1980s to roughly 15°C today, indicating that nights are warming faster than days. This is consistent with a pattern documented globally in the climate literature and generally attributed to changes in cloud cover trapping heat overnight <span class="citation" data-cites="ucs2022nights liu2024dtr">[@ucs2022nights; @liu2024dtr]</span>. This day-night temperature swing is a key mechanism behind Oregon’s suitability for growing Pinot Noir: warm days build sugar, while cool nights slow the grape’s respiration long enough to retain complex acidity, color, and aromatic qualities in the grape <span class="citation" data-cites="ajev2012dtr">[@ajev2012dtr]</span>. Controlled experiments on Pinot Noir, specifically, have found that compressing this range alters organic acid metabolism and can suppress color accumulation, and a companion study found Pinot Noir was one of the varieties most sensitive to elevated diurnal temperature among the major red varieties tested <span class="citation" data-cites="frontiers2025bunchheating pmc2022highTemp">[@frontiers2025bunchheating; @pmc2022highTemp]</span>.</p>
+<p>This narrowing diurnal range is a potential risk to wine <em>quality</em> that has not surfaced in the production metrics alone. Diurnal range operates on wine quality through a physiological process that is more nuanced than heat-accumulation metrics in isolation, and models built on yield alone will miss this leading indicator entirely. Future research could evaluate this risk through proxy indicators of wine quality such as price premiums or critic-score text mining.</p>
+</section>
+<section id="predicting-yield-across-the-growing-season" class="level2">
+<h2 class="anchored" data-anchor-id="predicting-yield-across-the-growing-season">Predicting yield across the growing season</h2>
+<p>We next aim to create a predictive model built on two key observations from our analysis thus far: (1) yield has been resilient across the historical climate range and (2) the climate signal accumulates in stages over the course of the growing season. We argue that a model built only on a single end-of-season snapshot is less useful to a wine grower who experiences these climate conditions sequentially throughout the annual growth cycle.</p>
+<p>Insights derived from our predictive model are intended to help wine growers understand not only what climate interactions have the ability to impact yield, but when those impacts would be most visible in the growing season, and for which varieties they matter most. We modeled yield_derived (production tons per harvested acre) using a Support Vector Machine (SVM) with a radial basis function (RBF) kernel, tuned via Cross-Validation (CV). An SVM was selected because the usable sample, roughly 1,000 region-by-variety-year observations, is small enough that a kernel method with relatively few tunable parameters is less prone to overfitting, while the RBF kernel still captures the non-linear climate-yield relationships suggested by our correlation analysis. Our small observation size contained class imbalances in varietal observations, particularly in Merlot and Pinot Blanc, where Pinot Blanc’s imbalance ratio against Pinot Noir was 3.7x, that were balanced in the training data through weighting samples by inverse frequency.</p>
+</section>
+<section id="adjust-for-class-imbalance" class="level2">
+<h2 class="anchored" data-anchor-id="adjust-for-class-imbalance">Adjust for class imbalance</h2>
+<ul>
+<li>Weight = inverse of how many rows that variety-by-region combination has, normalized so weights average to 1</li>
+<li>Down-weights the influence of well-represented groups (Pinot Noir, North Willamette Valley) relative to thin ones (Pinot Blanc, Merlot)</li>
+</ul>
+<p>Table 2 shows the resulting sample weight for each region-by-variety combination, ranked from most to least up-weighted. Groups with the fewest rows receive the largest weights, so the model treats each combination as roughly equally informative during training rather than letting the best-sampled groups (Pinot Noir, Chardonnay) dominate simply because they have more rows.</p>
+<div class="cell" data-tbl-cap="Table 2: Sample weight by region and variety combination (most and least up-weighted)">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Table 2: Sample weight by region and variety combination (most and least up-weighted)</caption>
+<colgroup>
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 6%">
+<col style="width: 12%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Region</th>
+<th style="text-align: left;">Variety</th>
+<th style="text-align: right;">N rows</th>
+<th style="text-align: right;">Sample weight</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Columbia River at Large</td>
+<td style="text-align: left;">Pinot Gris</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">1.43</td>
+<td style="text-align: left;">Most up-weighted (thinnest groups)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">South Willamette Valley</td>
+<td style="text-align: left;">Merlot</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">1.43</td>
+<td style="text-align: left;">Most up-weighted (thinnest groups)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rogue Valley</td>
+<td style="text-align: left;">Pinot Blanc</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">1.36</td>
+<td style="text-align: left;">Most up-weighted (thinnest groups)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">North Willamette Valley</td>
+<td style="text-align: left;">Pinot Blanc</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">1.36</td>
+<td style="text-align: left;">Most up-weighted (thinnest groups)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Umpqua</td>
+<td style="text-align: left;">Pinot Gris</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">1.24</td>
+<td style="text-align: left;">Most up-weighted (thinnest groups)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Columbia River at Large</td>
+<td style="text-align: left;">Gewurztraminer</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">1.19</td>
+<td style="text-align: left;">Most up-weighted (thinnest groups)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Columbia River at Large</td>
+<td style="text-align: left;">Merlot</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">1.14</td>
+<td style="text-align: left;">Most up-weighted (thinnest groups)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Umpqua</td>
+<td style="text-align: left;">Merlot</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">1.14</td>
+<td style="text-align: left;">Most up-weighted (thinnest groups)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rogue Valley</td>
+<td style="text-align: left;">Merlot</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">1.14</td>
+<td style="text-align: left;">Most up-weighted (thinnest groups)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Umpqua</td>
+<td style="text-align: left;">Cabernet Savignon</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">1.06</td>
+<td style="text-align: left;">Most up-weighted (thinnest groups)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">North Willamette Valley</td>
+<td style="text-align: left;">Pinot Noir</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">0.92</td>
+<td style="text-align: left;">Least up-weighted (best-sampled groups)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">North Willamette Valley</td>
+<td style="text-align: left;">Gewurztraminer</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">0.92</td>
+<td style="text-align: left;">Least up-weighted (best-sampled groups)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">North Willamette Valley</td>
+<td style="text-align: left;">Chardonnay</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">0.92</td>
+<td style="text-align: left;">Least up-weighted (best-sampled groups)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Columbia River at Large</td>
+<td style="text-align: left;">Riesling/White Riesling</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">0.92</td>
+<td style="text-align: left;">Least up-weighted (best-sampled groups)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Umpqua</td>
+<td style="text-align: left;">Riesling/White Riesling</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">0.92</td>
+<td style="text-align: left;">Least up-weighted (best-sampled groups)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>To capture this compounding effect of time and climate information, we fit three separate models, each representing what a grower would actually know at that point in the season: a spring model (frost risk only), a summer model (adding growing degree days, heat stress, and vapor pressure deficit), and a harvest model (adding veraison-to-harvest GDD, October precipitation, and ripening diurnal range).</p>
+<p>All three stages were evaluated on the same time-blocked pre-2020 train/test partition rather than a simple random split. Oregon’s yield has trended upward over the study period, and its climate is itself autocorrelated from one year to the next, so a random split risks placing a test year directly adjacent to a training year from the same short-term trend, letting the model interpolate between nearby years rather than genuinely predicting an unseen one. To guard against this, we split pre-2020 data into contiguous three-year blocks, assigned roughly 10% of rows to test blocks spread across the full date range, and removed a one-year buffer from training on each side of the test block, so that no training year sits immediately adjacent to a test year. All three growing-season stages were tuned and evaluated on this same partition, so that any difference in performance across stages reflects the additional climate information available at that stage, not a different sample of years.</p>
+<p>Post-2020 data was held out entirely from training and evaluated separately, as a case study rather than a fourth fold. We treat 2020 onward this way throughout the report because the wildfire smoke taint that disrupted that year’s harvest was a discrete event rather than part of the underlying gradual climate trend our models are built to capture; folding it into training on equal footing with other years would risk attributing a smoke-driven production loss to ordinary climate variability.</p>
+<p>For a baseline metric against the SVM’s performance, we ran a weighted least squares linear model along the same sample splits. If the linear model found a relationship the SVM did not, that would point to the SVM being poorly suited to this data, rather than the underlying relationship being genuinely weak. Conversely, if the SVM detected a relationship the linear model could not, that would suggest a non-linear climate-yield relationship the RBF kernel is able to capture but a linear model cannot.</p>
+</section>
+<section id="climate-becomes-predictive-mid-season-then-declines" class="level2">
+<h2 class="anchored" data-anchor-id="climate-becomes-predictive-mid-season-then-declines">Climate becomes predictive mid-season, then declines</h2>
+<div class="cell" data-tbl-cap="Table 3: Held-out test performance by growing-season stage (SVM)">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Table 3: Held-out test performance by growing-season stage (SVM)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Stage</th>
+<th style="text-align: right;">RMSE</th>
+<th style="text-align: right;">R²</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Stage 1: Spring</td>
+<td style="text-align: right;">1.139</td>
+<td style="text-align: right;">0.012</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Stage 2: Summer</td>
+<td style="text-align: right;">1.105</td>
+<td style="text-align: right;">0.069</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Stage 3: Harvest</td>
+<td style="text-align: right;">1.123</td>
+<td style="text-align: right;">0.040</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="_05_results_files/figure-html/residual-distribution-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Figure 9: Distribution of held-out residuals by growing-season stage</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Table 3 and Figure 9 show held-out test performance for all three growing-season stages. The relationship between climate and yield is modest throughout, an R² range of roughly 0.01 to 0.07. The staged models show that climate information is not predictive in the spring, becomes predictive in the summer, and then declines in predictive power once harvest-stage features are added. This pattern is consistent with our correlation analysis, which found that growing degree days and heat stress were the most strongly correlated climate features with yield, while veraison-to-harvest GDD, October precipitation, and ripening diurnal range were not strongly correlated with yield.</p>
+<p>Figure 9 shows a tighter spread of residuals for the summer model than for the harvest model, despite the harvest model having strictly more information available to it. This suggests that the harvest-stage features are not adding predictive value and may even be introducing noise into the model. Because of this, we use the summer model, not the full-season harvest model, as our final model for the post-2020 case study below.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="_05_results_files/figure-html/residuals-by-variety-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Figure 10: Residual spread by variety, across growing-season stages</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Figure 10 breaks the same residuals down by variety instead of by stage. The model is best-behaved for Oregon’s most heavily represented varieties, Pinot Noir and Chardonnay in particular show residuals centered close to zero across all three stages, while the state’s thinner varieties show wider, more biased spread that does not meaningfully improve as later-stage features are added. This is the first hint of a pattern that becomes explicit once we look at which features each model actually relies on: when climate information alone cannot fully explain yield for a given variety, the model has to fall back on something else to make up the difference, and that something else is knowing which variety it is looking at in the first place.</p>
+</section>
+<section id="model-reliance-on-variety-identity-vs.-climate-features" class="level2">
+<h2 class="anchored" data-anchor-id="model-reliance-on-variety-identity-vs.-climate-features">Model reliance on variety identity vs.&nbsp;climate features</h2>
+<p>Figure 11 shows why the residual patterns in Figure 10 look the way they do. In the spring model, variety identity dominates by a wide margin, unsurprising given that the only climate features available at that point, frost risk and coldest spring night, showed no meaningful correlation with yield in our statistical analysis. With almost no useful climate signal to draw on, the model falls back on which variety it is looking at as its primary basis for prediction.</p>
+<p>Variety identity remains the single most important feature in the summer model as well, but growing degree days now emerges as a substantial contributor alongside it, rather than a negligible one. This lines up directly with Table 3: the summer model’s jump in R² is attributable specifically to GDD becoming informative once it enters the feature set, not to any change in how much the model relies on variety. Put together, Figures 10 and 11 tell a consistent story: variety identity is doing real work throughout, GDD adds a genuine, if modest, second signal starting in the summer model, and the later, more granular harvest-stage features neither reduce the model’s reliance on variety nor add a comparable climate signal of their own.</p>
+</section>
+<section id="does-the-post-2020-period-leave-a-more-visible-mark-on-some-varieties" class="level2">
+<h2 class="anchored" data-anchor-id="does-the-post-2020-period-leave-a-more-visible-mark-on-some-varieties">Does the post-2020 period leave a more visible mark on some varieties?</h2>
+<p>We treat 2020 as a discrete disruption rather than part of the underlying climate trend, so it was held out entirely from training. As a case study, we refit the summer model, the best-performing stage, on all pre-2020 data and evaluated it against each variety’s actual yield from 2020 through 2024. A wide or biased residual here does not necessarily mean climate hit that variety harder; the summer model has no wildfire or smoke-taint feature at all, so a large residual only tells us climate and variety together fail to explain that variety’s post-2020 yield, for reasons the model cannot see.</p>
+<div class="cell" data-tbl-cap="Table 4: Post-2020 residuals by variety (summer model), 2020-2024">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Table 4: Post-2020 residuals by variety (summer model), 2020-2024</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 19%">
+<col style="width: 20%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variety</th>
+<th style="text-align: right;">Mean residual</th>
+<th style="text-align: right;">SD of residual</th>
+<th style="text-align: right;">N (2020-2024 rows)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Pinot Blanc</td>
+<td style="text-align: right;">-0.28</td>
+<td style="text-align: right;">1.39</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Riesling/White Riesling</td>
+<td style="text-align: right;">-0.23</td>
+<td style="text-align: right;">1.24</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Gewurztraminer</td>
+<td style="text-align: right;">-0.10</td>
+<td style="text-align: right;">1.02</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Chardonnay</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.97</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Cabernet Savignon</td>
+<td style="text-align: right;">0.17</td>
+<td style="text-align: right;">0.95</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pinot Gris</td>
+<td style="text-align: right;">0.76</td>
+<td style="text-align: right;">0.89</td>
+<td style="text-align: right;">17</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Pinot Noir</td>
+<td style="text-align: right;">0.45</td>
+<td style="text-align: right;">0.74</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Merlot</td>
+<td style="text-align: right;">-0.07</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">15</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="_05_results_files/figure-html/post2020-case-study-plot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Figure 12: Post-2020 residuals by variety, mean ± 1 SD (summer model)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Table 4 and Figure 12 show that post-2020 unpredictability is not evenly spread across varieties, and it does not fall where our earlier smoke-taint finding might suggest. Pinot Blanc and Riesling show the widest residual spread and the most negative mean, meaning the model consistently overestimates their yield and does so inconsistently from year to year; Pinot Blanc’s result, drawn from only 10 rows, is the thinnest sample in this case study and should be read with particular caution.</p>
+<p>Pinot Noir, the variety our production-weighted yield analysis showed took the sharpest single-year hit from 2020 wildfire smoke, tells a different story once the window widens to include the recovery years. Its residual spread is the second-tightest of any variety, and its mean residual is solidly positive, meaning actual yield from 2020 through 2024 ran above what climate alone would have predicted. This is consistent with, rather than a contradiction of, our earlier framing of 2020 as a discrete, one-year disruption: across the full post-2020 window, Pinot Noir’s climate-yield relationship looks stable, and the industry’s documented rebound (Figure 6) shows up here as a model that continues to underestimate, not overestimate, the variety’s recovery.</p>
+<p>Because our summer model was never built to detect wildfire smoke specifically, we read this pattern as a starting point for further investigation rather than a settled explanation. Whether Pinot Blanc and Riesling’s post-2020 unpredictability reflects a genuine variety-specific climate response, the compounding effect of multiple fire years our features do not capture, or simply the smaller and noisier samples these two varieties carry throughout this analysis, is a question this dataset alone cannot resolve.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,62 @@
+# Data
+
+## Data sources 
+
+**Oregon wine production and pricing** data comes from the Oregon Vineyard and Winery Annual Reports, conducted since 1981 by various research groups and currently maintained by the University of Oregon [@oregonwinecensus]. Reports prior to 2017 exist only as scanned & digital PDF documents and were ingested using AWS Textract; later years were ingested directly from structured spreadsheets.
+
+**Climate data** was retrieved from the PRISM Climate Group, maintained by Oregon State University. PRISM provides daily gridded temperature and precipitation observations across the contiguous United States [@prism2026]. We retrieved daily observations from 1981-2024 across all 23 federally-recognized AVAs in Oregon. Zonal statistics were produced for each AVA by averaging the raster grid within each AVA boundary using the Python rasterstats library. AVA boundaries were defined by shapefiles obtained from the Alcohol and Tobacco Tax and Trade Bureau (TTB), which were converted to GeoJSON prior to their use in the ingestion script.
+
+From the daily climate data, we derived a set of features chosen specifically for their relevance to viticulture, rather than working with raw daily temperature and precipitation directly.
+
+| Feature | Definition |
+|-|-|
+| Frost risk days | Count of days below freezing, annually and during the April–May bud-break window |
+| Coldest spring night | Minimum recorded temperature during spring bud-break |
+| Growing degree days (GDD) | Accumulated heat above a 10°C (50°F) base, April–September (Winkler index), plus a April–October variant and a July 15–October 15 "véraison-to-harvest" window |
+| Heat stress days | Count of days with a maximum temperature above 35°C (95°F) during the growing season |
+| Vapor pressure deficit (VPD) | A measure of atmospheric dryness / evaporative demand, computed for summer (July–August) and ripening (August–September) windows |
+| Diurnal temperature range (ripening) | Average day-night temperature swing during August–September, the period when grapes develop their sugar, color, and acidity |
+| Harvest precipitation | Total precipitation in October, and in the September–October window |
+
+## Data engineering pipeline
+
+Climate and production data were ingested on a recurring Amazon Web Services (AWS) batch pipeline (one task per AVA), computed into region- and statewide-level summaries, and stored in a PostgreSQL database hosted on Railway. AWS was chosen specifically for the production-data side of the pipeline, as reconstructing tables from PDF reports required routing each report era through separate Textract-based parsers due to varied report formats, column layouts, and label conventions. For the climate data, daily PRISM rasters were cached prior to computing zonal statistics, which were then written to the database via an idempotent upsert. Running this pipeline on AWS Batch / Fargate Spot allowed each AVA to be processed as a parallel, independently retriable job, though Spot interruptions during the original run caused some days to be missed; these were identified and backfilled in a final pass before the analysis tables were built.
+
+Two analysis-ready tables were constructed on top of the raw data: 
+
+| Panel | Coverage | Grain | Purpose |
+|-|-|-|-|
+| Regional panel | 1987-2024 | One row per region x variety x year | Yield modeling and region-level comparisons |
+| Statewide panel | 1987-2024 | One row per variety x year | Long-run varietal-mix analysis where regional detail is unnecessary |
+
+Both panels begin in 1987, rather than 1981, because of limitations in the production data. While the full PRISM climate dataset was available from 1981 for all AVAs, the underlying wine census reports for 1981-1986 do not contain the area-by-variety breakdown tables needed to reconstruct regional variety data. These reports *do* contain bearing and non-bearing acreage by county, which could in principle be aggregated to the region level for an acreage-only (not variety-level) time series; we did not pursue this, and instead clipped both panels to 1987 onward to keep the regional and statewide tables consistent.
+
+Region-variety combinations were filtered to those with at least 20 years of historical data and zero-production / zero-harvest rows were dropped. This reduced the original ~1,300 region-variety-year observations to ~990 in the regional panel.
+
+The analysis tables were exported to Parquet files, which are used as the final data references for this report to preserve reproducibility. Our long-term goal is to make the underlying database publicly available, but this is a continued work in progress.
+
+## Ethical considerations
+
+A few ethical considerations shaped how we approached this dataset:
+
+1. **Regional underrepresentation:** Underlying wine census data is reported by region, not by individual vineyard or winery, and is a voluntary industry survey rather than a full census. We recognize that this led to underrepresentation for some counties in some years. 
+2. **Diversity and inclusion gaps among Oregon wine producers:** Because there are very few minority-owned wineries in Oregon—our research turned up only two Native-owned wineries statewide—there is a real possibility that patterns related to these ownership demographics are invisible in this dataset. The effect of climate may have a disproportionate impact on some groups over others, but data was never collected that could surface these patterns.
+3. **Impact of immigration on Oregon wine production:** Recent immigration policy has affected farmworkers and their families in ways that are impossible to quantify from production statistics alone. The truth is that Oregon wine production relies heavily on seasonal immigrant labor, and the raw production numbers do not tell the human story of these populations who are increasingly at risk in American society. 
+
+We treat this dataset as a record of production and climate outcomes only, not as a complete picture of the people who participate in the industry that these outcomes describe.
+
+## Data quality caveats
+
+We would like to provide transparency with respect to some key tradeoffs in our data collection:
+
+- **Pre-2002 regional variety data is reconstructed, not directly reported.** From 1987–2001, the industry reports at the statewide level did not break variety out by region; those years were reconstructed by aggregating county-level figures up to reporting regions. North Willamette Valley acreage, for example, is undercounted by roughly 15–20% for years before 1999 because the source area tables for that era only list major counties. This undercount only affects the variety-level breakdown for that region; the "all varieties" total is accurate. We treat pre-2002 regional findings with corresponding caution throughout this report and do not present county-aggregated reconstructions as precise counts.
+- **Regional and statewide panels begin in 1987, not 1981, despite full climate coverage back to 1981**: As described above, this is driven entirely by gaps in the wine production data source tables, not by any limitation in the climate data.
+- **Price per ton (`PRI_01`) is only available at the region level from 2010 onward.** This is a genuine limitation of the source data and constrains how far back any price-based analysis can go. Additionally, because price is affected by many factors, of which climate is only one, our analysis centers mainly around production data rather than price data.
+- **The wine census is self-reported and voluntary, not a full census.** We treat year-to-year volatility in the raw production series with more caution than the smoothed, multi-year trends.
+
+None of these caveats change our core findings, which are drawn primarily from long-term trends and the more reliable 2002–2024 window and from the climate data which has no comparable gaps. PRISM provides complete daily coverage for all 23 AVAs across the full 1981–2024 period.
+
+
+
+
+
