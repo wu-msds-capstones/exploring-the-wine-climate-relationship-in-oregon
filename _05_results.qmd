@@ -27,7 +27,7 @@ statewide <- statewide %>%
 key_varieties <- c("Pinot Noir", "Pinot Gris", "Chardonnay", "Riesling")
 
 variety_colors <- c(
-  "Pinot Noir" = "#b2182b"
+  "Pinot Noir" = "#8B1E3F"
   , "Pinot Gris" = "#4393c3"
   , "Chardonnay" = "#d6604d"
   , "Riesling" = "#d4a017"
@@ -40,9 +40,17 @@ region_levels <- regional %>%
   arrange(region_label) %>%
   pull(region_label)
 
-region_colors <- setNames(
-  RColorBrewer::brewer.pal(max(3, length(region_levels)), "Set1")[seq_along(region_levels)]
-  , region_levels
+# region_colors <- setNames(
+#   RColorBrewer::brewer.pal(max(3, length(region_levels)), "Set1")[seq_along(region_levels)]
+#   , region_levels
+# )
+
+region_colors <- c(
+  "North Willamette Valley" = "#8B1E3F",
+  "South Willamette Valley" = "#4393c3",
+  "Rogue Valley"            = "#d6604d",
+  "Umpqua"                  = "#d4a017",
+  "Columbia River at Large" = "#999999"
 )
 
 lighten_color <- function(hex, amount = 0.65) {
@@ -250,10 +258,10 @@ sw_climate <- statewide %>%
 
 ggplot(sw_climate, aes(yr, diurnal_range_ripening)) +
   annotate("rect", xmin = -Inf, xmax = Inf, ymin = 15, ymax = 20
-           , fill = "#4A7CC7", alpha = 0.08) +
+           , fill = "#4393c3", alpha = 0.08) +
   annotate("text", x = min(sw_climate$yr, na.rm = TRUE), y = 20.3
            , label = "Ideal range for Pinot Noir ripening (15-20°C)"
-           , hjust = 0, size = 3, color = "#4A7CC7") +
+           , hjust = 0, size = 3, color = "#4393c3") +
   geom_line(color = "grey60", alpha = 0.7, linewidth = 0.6) +
   geom_smooth(method = "lm", se = TRUE, color = "#8B1E3F", fill = "#8B1E3F", alpha = 0.15, linewidth = 1.1) +
   labs(title = "Ripening-season diurnal temperature range is shrinking"
@@ -347,7 +355,7 @@ stage_predictions <- read_parquet("data/ml_results/stage_predictions.parquet") %
 
 ggplot(stage_predictions, aes(x = stage, y = residual)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "grey40") +
-  geom_boxplot(fill = "#4A7CC7", alpha = 0.3, width = 0.5) +
+  geom_boxplot(fill = "#4393c3", alpha = 0.3, width = 0.5) +
   labs(title = "Residual spread widens at the harvest stage",
        subtitle = "Positive = model underestimated actual yield; negative = model overestimated"
        , x = NULL, y = "Residual (actual \u2212 predicted yield, tons/acre)") +
@@ -366,7 +374,7 @@ Figure 9 shows a tighter spread of residuals for the summer model than for the h
 #| fig-cap: "Figure 10: Residual spread by variety, across growing-season stages"
 ggplot(stage_predictions, aes(x = variety_label, y = residual)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "grey40") +
-  geom_boxplot(fill = "#4A7CC7", alpha = 0.3) +
+  geom_boxplot(fill = "#4393c3", alpha = 0.3) +
   coord_flip() +
   facet_wrap(~stage) +
   labs(title = "Which varieties does the model explain well, and where does it struggle?",
