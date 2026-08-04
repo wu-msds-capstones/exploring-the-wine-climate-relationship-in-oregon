@@ -9,7 +9,6 @@ manuscript:
 
 format: 
   html:
-    output-file: index.html
     theme:
       light: lightly
       dark: darkly
