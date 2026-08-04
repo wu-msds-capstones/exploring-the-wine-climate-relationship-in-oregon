@@ -366,21 +366,49 @@ Table 3 and Figure 9 show held-out test performance for all three growing-season
 
 Figure 9 shows a tighter spread of residuals for the summer model than for the harvest model, despite the harvest model having strictly more information available to it. This suggests that the harvest-stage features are not adding predictive value and may even be introducing noise into the model. Because of this, we use the summer model, not the full-season harvest model, as our final model for the post-2020 case study below.
 
+
 ```{r residuals-by-variety}
 #| echo: false
 #| warning: false
 #| message: false
 #| fig-width: 7
 #| fig-cap: "Figure 10: Residual spread by variety, across growing-season stages"
-ggplot(stage_predictions, aes(x = variety_label, y = residual)) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "grey40") +
-  geom_boxplot(fill = "#4393c3", alpha = 0.3) +
+
+reds <- c("Pinot Noir", "Cabernet Savignon", "Merlot")
+whites <- c("Chardonnay", "Pinot Gris", "Riesling/White Riesling", "Gewurztraminer", "Pinot Blanc")
+
+stage_predictions <- stage_predictions %>%
+  mutate(
+    wine_type = case_when(
+      variety_label %in% reds ~ "Red",
+      variety_label %in% whites ~ "White",
+      TRUE ~ "Other"
+    ),
+    # whites first (bottom), reds last (top) after coord_flip
+    variety_label = factor(variety_label, levels = c(whites, reds))
+  )
+
+p_residuals_by_variety <- ggplot(stage_predictions, aes(x = variety_label, y = residual, fill = wine_type)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  geom_boxplot(alpha = 0.3) +
   coord_flip() +
   facet_wrap(~stage) +
-  labs(title = "Which varieties does the model explain well, and where does it struggle?",
-       subtitle = "Positive = model underestimated actual yield; negative = model overestimated"
-       , x = NULL, y = "Residual (actual \u2212 predicted yield, tons/acre)") +
-  theme_minimal()
+  scale_fill_manual(values = c("Red" = "#881e3f", "White" = "#4393c3", "Other" = "grey60")) +
+  labs(title = "Which varieties does the model explain well,\nwhere does it struggle?",
+       subtitle = "Positive = model underestimated actual yield;\nnegative = model overestimated",
+       x = NULL, y = "Residual (actual \u2212 predicted yield, tons/acre)",
+       fill = "Wine type") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        strip.placement = "outside",
+        strip.text = element_text(face = "bold", size = 9),
+        plot.title = element_text(size = 16, face = "bold"),
+        plot.subtitle = element_text(size = 13, color = "grey40"),
+        axis.text = element_text(size = 10, color = "black"),
+        axis.title = element_text(size = 11, color = "black"))
+
+p_residuals_by_variety
+
 ```
 
 Figure 10 breaks the same residuals down by variety instead of by stage. The model is best-behaved for Oregon's most heavily represented varieties, Pinot Noir and Chardonnay in particular show residuals centered close to zero across all three stages, while the state's thinner varieties show wider, more biased spread that does not meaningfully improve as later-stage features are added. This is the first hint of a pattern that becomes explicit once we look at which features each model actually relies on: when climate information alone cannot fully explain yield for a given variety, the model has to fall back on something else to make up the difference, and that something else is knowing which variety it is looking at in the first place.
