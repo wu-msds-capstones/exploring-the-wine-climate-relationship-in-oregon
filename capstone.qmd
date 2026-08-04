@@ -9,6 +9,7 @@ bibliography: references.bib
 title-block-banner: true
 format: 
   html:
+    output-file: index.html
     theme:
       light: lightly
       dark: darkly
