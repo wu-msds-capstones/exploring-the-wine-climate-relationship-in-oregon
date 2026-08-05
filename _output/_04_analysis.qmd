@@ -19,17 +19,21 @@ regional  <- read_parquet("data/analysis_panel_regional.parquet")
 statewide <- read_parquet("data/analysis_panel_statewide.parquet")
 
 regional <- regional %>%
-  mutate(yield_derived = production_tons / acres_harvested, variety_label = str_trim(variety_label))
+  mutate(yield_derived = production_tons / acres_harvested
+         , variety_label = str_trim(variety_label)
+         , variety_label = if_else(variety_label == "Riesling/White Riesling", "Riesling", variety_label))
 statewide <- statewide %>%
-  mutate(yield_derived = production_tons / acres_harvested, variety_label = str_trim(variety_label))
+  mutate(yield_derived = production_tons / acres_harvested
+         , variety_label = str_trim(variety_label)
+         , variety_label = if_else(variety_label == "Riesling/White Riesling", "Riesling", variety_label))
 
-key_varieties <- c("Pinot Noir", "Pinot Gris", "Chardonnay", "Riesling/White Riesling")
+key_varieties <- c("Pinot Noir", "Pinot Gris", "Chardonnay", "Riesling")
 
 variety_colors <- c(
-  "Pinot Noir" = "#b2182b"
+  "Pinot Noir" = "#8B1E3F"
   , "Pinot Gris" = "#4393c3"
   , "Chardonnay" = "#d6604d"
-  , "Riesling/White Riesling" = "#d4a017"
+  , "Riesling" = "#d4a017"
   , "Other" = "#999999"
 )
 
@@ -39,9 +43,17 @@ region_levels <- regional %>%
   arrange(region_label) %>%
   pull(region_label)
 
-region_colors <- setNames(
-  RColorBrewer::brewer.pal(max(3, length(region_levels)), "Set1")[seq_along(region_levels)]
-  , region_levels
+# region_colors <- setNames(
+#   RColorBrewer::brewer.pal(max(3, length(region_levels)), "Set1")[seq_along(region_levels)]
+#   , region_levels
+# )
+
+region_colors <- c(
+  "North Willamette Valley" = "#8B1E3F",
+  "South Willamette Valley" = "#4393c3",
+  "Rogue Valley"            = "#d6604d",
+  "Umpqua"                  = "#d4a017",
+  "Columbia River at Large" = "#999999"
 )
 
 lighten_color <- function(hex, amount = 0.65) {
@@ -150,7 +162,7 @@ ggplot(sw_climate, aes(yr, gdd_anom)) +
   geom_col(aes(fill = gdd_anom > 0), width = 0.7) +
   geom_line(aes(y = gdd_rolling10_anom), color = "black", linewidth = 1) +
   geom_hline(yintercept = 0, color = "grey30", linewidth = 0.4) +
-  scale_fill_manual(values = c(`TRUE` = "#b2182b", `FALSE` = "#2166ac"), guide = "none") +
+  scale_fill_manual(values = c(`TRUE` = "#8B1E3F", `FALSE` = "#2166ac"), guide = "none") +
   geom_vline(xintercept = break_year, linetype = "dashed", color = "grey40", linewidth = 0.6) +
   annotate("text", x = break_year, y = -150, label = paste0("Structural shift begins in ", break_year), hjust = -0.15, vjust = 1, size = 3, color = "grey40") +
   labs(title = "Oregon's growing season is getting warmer"
@@ -190,7 +202,7 @@ sw_climate %>%
   ))) %>%
   ggplot(aes(yr, value)) +
   geom_line(color = "grey60", alpha = 0.7) +
-  geom_smooth(method = "lm", se = TRUE, color = "#b2182b", fill = "#b2182b", alpha = 0.15) +
+  geom_smooth(method = "lm", se = TRUE, color = "#8B1E3F", fill = "#8B1E3F", alpha = 0.15) +
   facet_wrap(~indicator, scales = "free_y", ncol = 2) +
   labs(title = str_wrap("Diurnal ripening range is a notable exception among Oregon's viticultural indicators", width = 60)
        , subtitle = "Oregon viticultrual indicators by season; linear trend lines with 95% confidence intervals, 1987-2024"
@@ -273,7 +285,7 @@ ggcorrplot(
   , type = "upper"
   , lab = TRUE
   , lab_size = 3
-  , colors = c("#4393c3", "white", "#b2182b")
+  , colors = c("#4393c3", "white", "#8B1E3F")
   )
 ```
 
