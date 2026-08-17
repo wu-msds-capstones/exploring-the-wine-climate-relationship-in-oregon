@@ -345,7 +345,7 @@ vif_vals <- car::vif(vif_model)
 plot_vif(vif_vals)
 ```
 
-Sep-Oct precipitation and Oct precipitation come out highest, confirming we should not include both in the model. We elected to drop Sep-Oct precipitation, as we recognize Oct precipiatation specifically as an important botrytis / harvest-timing risk.
+Sep-Oct precipitation and Oct precipitation come out highest, confirming we should not include both in the model. We elected to drop Sep-Oct precipitation, as we recognize Oct precipitation specifically as an important botrytis / harvest-timing risk.
 
 Surprisingly, Summer VPD is *higher* than GDD Apr-Sep (6.43 vs. 4.13), even though the correlation matrix showed VPD's strongest pairwise correlation was with GDD. This tells us Summer VPD is well-explained by some *combination* of GDD Apr-Sep, heat stress days, and ripening temp range together, rather than by a strong individual pairwise correlation with any one of them. We elect to drop GDD Apr-Sep and keep Summer VPD, as it is the more direct measure of vine water stress.
 
@@ -373,7 +373,7 @@ All remaining VIFs fall under a conservative threshold of VIF<5. Our retained pr
 |-|-|
 | Frost risk days | Count of days below freezing during the April–May bud-break window |
 | Coldest spring night | Minimum recorded temperature during spring bud-break |
-| GDD (Véraison–Harvest) | Accumulated heat above a 10°C (50°F) base during July 15–October 15 "véraison-to-harvest" window |
+| GDD (Veraison–Harvest) | Accumulated heat above a 10°C (50°F) base during July 15–October 15 "veraison-to-harvest" window |
 | Heat stress days | Count of days with a maximum temperature above 35°C (95°F) during the growing season |
 | Summer VPD | A measure of atmospheric dryness / evaporative demand during July–August |
 | Diurnal temperature range (ripening) | Average day-night temperature swing during August–September, the period when grapes develop their sugar, color, and acidity |
