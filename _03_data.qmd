@@ -12,7 +12,7 @@ From the daily climate data, we derived a set of features chosen specifically fo
 |-|-|
 | Frost risk days | Count of days below freezing, annually and during the April–May bud-break window |
 | Coldest spring night | Minimum recorded temperature during spring bud-break |
-| Growing degree days (GDD) | Accumulated heat above a 10°C (50°F) base, April–September (Winkler index), plus a April–October variant and a July 15–October 15 "véraison-to-harvest" window |
+| Growing degree days (GDD) | Accumulated heat above a 10°C (50°F) base, April–September (Winkler index), plus a April–October variant and a July 15–October 15 "veraison-to-harvest" window |
 | Heat stress days | Count of days with a maximum temperature above 35°C (95°F) during the growing season |
 | Vapor pressure deficit (VPD) | A measure of atmospheric dryness / evaporative demand, computed for summer (July–August) and ripening (August–September) windows |
 | Diurnal temperature range (ripening) | Average day-night temperature swing during August–September, the period when grapes develop their sugar, color, and acidity |

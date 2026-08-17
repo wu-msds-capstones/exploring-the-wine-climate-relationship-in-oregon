@@ -174,7 +174,7 @@ All varieties rebound to new all-time highs within three years. Indeed, outside 
 
 However, this pattern is not uniform across varieties. Pinot Gris demonstrated the largest yield gain of the four key varieties (roughly a `r get_pct_change("Pinot Gris")`% increase), with Pinot Noir close behind (`r get_pct_change("Pinot Noir")`%) and Chardonnay more modest (`r get_pct_change("Chardonnay")`%). In contrast, Riesling shows essentially no relationship between yield and warmth of the growing season (`r get_pct_change("Riesling")`%). This could be attributed to the fact that its production is concentrated largely in the cooler North Willamette Valley that rarely experiences the warmer end of the state's climate range. 
 
-We also note that Pinot Gris' rising share of statewide production (Figure 1) is attributable not not only to an increasing share of planted acres, but also because this variety appears to yield higher volumes in the warmer seasons that are becoming increasingly common in Oregon.
+We also note that Pinot Gris' rising share of statewide production (Figure 1) is attributable not only to an increasing share of planted acres, but also because this variety appears to yield higher volumes in the warmer seasons that are becoming increasingly common in Oregon.
 
 ```{r yield_by_region}
 #| echo: false
