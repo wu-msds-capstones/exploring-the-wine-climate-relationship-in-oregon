@@ -250,7 +250,7 @@ The sixth indicator—ripening-season diurnal temperature range—is the one met
 
 ## How the climate features relate
 
-Several of these climate measures are closely related to aspects of the same underlying warming trend.To identify features that connect to the same trend, we ran a correlation matrix. 
+Several of these climate measures are closely related to aspects of the same underlying warming trend. To identify features that connect to the same trend, we ran a correlation matrix. 
 
 ```{r climate_correlations}
 #| echo: false
