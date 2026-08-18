@@ -125,29 +125,23 @@ variety_share %>%
 #| warning: false
 #| message: false
 # Small helper to pull a variety's share for a given year
-get_share <- function(df, variety, year) {
-  val <- df %>%
-    filter(variety_group == variety, yr == year) %>%
-    pull(production_share_pct)
-  if (length(val) == 0) {
-    # fall back to nearest available year
-    val <- df %>%
-      filter(variety_group == variety) %>%
-      slice_min(abs(yr - year), n = 1) %>%
-      pull(production_share_pct)
-  }
-  round(val, 0)
+get_share <- function(df, variety, year, span = 0.4) {
+  sub <- df %>% filter(variety_group == variety)
+  fit <- loess(production_share_pct ~ yr, data = sub, span = span)
+  predict(fit, newdata = data.frame(yr = year)) %>% round(0)
 }
 
-pinot_start_yr   <- 1990
-pinot_end_yr     <- 2020
-gris_start_yr    <- 1990
-gris_end_yr      <- 2010
+pinot_end_pct <- get_share(variety_share, "Pinot Noir", 2020)
 
-pinot_start_pct  <- get_share(variety_share, "Pinot Noir", pinot_start_yr)
-pinot_end_pct    <- get_share(variety_share, "Pinot Noir", pinot_end_yr)
-gris_start_pct   <- get_share(variety_share, "Pinot Gris", gris_start_yr)
-gris_end_pct     <- get_share(variety_share, "Pinot Gris", gris_end_yr)
+pinot_start_yr <- 1990
+pinot_end_yr <- 2020
+gris_start_yr <- 1990
+gris_end_yr <- 2010
+
+pinot_start_pct <- get_share(variety_share, "Pinot Noir", pinot_start_yr)
+pinot_end_pct <- get_share(variety_share, "Pinot Noir", pinot_end_yr)
+gris_start_pct <- get_share(variety_share, "Pinot Gris", gris_start_yr)
+gris_end_pct <- get_share(variety_share, "Pinot Gris", gris_end_yr)
 ```
 
 Figure 1 demonstrates Pinot Noir's growing share of statewide tonnage, from roughly `r pinot_start_pct`% in `r pinot_start_yr` to around `r pinot_end_pct`% by `r pinot_end_yr`. This trend has continued to build, while other anchor varieties like Chardonnay and Riesling have declined sharply over the same period. Pinot Gris is one variety that counteracts this trend, growing from a negligible share in `r gris_start_yr` to a stable ~`r gris_end_pct`% by `r gris_end_yr`.
