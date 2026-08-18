@@ -26,7 +26,7 @@ The climate trend itself is unambiguous. Growing degree days, peak summer temper
 #| message: false
 #| fig-width: 7
 #| fig-height: 10
-#| fig-cap: "Figure 12: Statewide production-weighted yield and ripening-season diurnal temperature range, 1981–2024"
+#| fig-cap: "Figure 13: Statewide production-weighted yield and ripening-season diurnal temperature range, 1981–2024"
 
 library(patchwork)
 
@@ -91,13 +91,13 @@ ggsave(
 )
 ```
 
-Figure 12 highlights the quality concern we identified earlier. The metric the industry measures and reports every year, yield, has moved in one direction. The metric that actually explains why Oregon built its reputation on Pinot Noir in the first place has moved in the other, causing a tightening of the diurabl temperature range. This is a quality concern that has yet to appear anywhere in Oregon's production statistics. Our machine learning results reinforce just how real that separation is: ripening diurnal range did not rank among the top five most important features for predicting yield at any stage of the growing season, including the harvest-stage model where it was directly available to the model as a feature. A grower, or a researcher, looking at yield alone has no reason to suspect anything has changed.
+Figure 13 highlights the quality concern we identified earlier. The metric the industry measures and reports every year, yield, has moved in one direction. The metric that actually explains why Oregon built its reputation on Pinot Noir in the first place has moved in the other, causing a tightening of the diurnal temperature range. This is a quality concern that has yet to appear anywhere in Oregon's production statistics. Our machine learning results reinforce just how real that separation is: ripening diurnal range did not rank among the top five most important features for predicting yield at any stage of the growing season, including the harvest-stage model where it was directly available to the model as a feature. A grower, or a researcher, looking at yield alone has no reason to suspect anything has changed.
 
-That resilience is also not evenly distributed across varieties, and this is where the machine learning phase added something the statistical analysis alone could only gesture toward. When climate information was thin, in the spring-only model, the model fell back almost entirely on which variety it was predicting rather than on climate itself, direct evidence that variety identity, not climate, is the first-order determinant of yield outcomes at this stage of Oregon's warming. Once summer climate features entered, growing degree days emerged as a genuine second contributor alongside variety, but variety identity remained the single most important feature at every stage we tested, spring, summer, and harvest alike. And the residual diagnostics showed that the varieties the model struggles to characterize, Cabernet Sauvignon, Merlot, and Pinot Blanc in particular, are disproportionately the state's minor plantings. We have the least reliable climate-sensitivity evidence for exactly the varieties with the smallest foothold to begin with, and the thinnest historical record to learn from.
+That resilience is also not evenly distributed across varieties, our machine learning results showed that when climate information was thin the model fell back almost entirely on which variety it was predicting rather than on climate itself. This is direct evidence that variety identity, not climate, is the first-order determinant of yield outcomes at this stage of Oregon's warming. Once summer climate features entered, growing degree days emerged as a significant second contributor alongside variety, but variety identity remained the single most important feature at every stage we tested, spring, summer, and harvest alike. And the residual diagnostics showed that the varieties the model struggles to characterize, Cabernet Sauvignon, Merlot, and Pinot Blanc in particular, are disproportionately the state's minor plantings. We have the least reliable climate-sensitivity evidence for exactly the varieties with the smallest foothold to begin with, and the thinnest historical record to learn from.
 
-Our post-2020 case study reinforces this same theme from a different angle, and complicates the simplest version of it. If weather were leaving a uniform mark across varieties, we would expect the variety our earlier analysis flagged as hit hardest by 2020 wildfire smoke, Pinot Noir, to also be the hardest for a climate model to explain across the recovery years that followed. It is not. Once the window widens to 2020 through 2024, Pinot Noir's yield is among the best-explained of any variety, and consistently better than a climate-only model would predict, showing a genuine recovery rather than a lingering instability. The varieties our summer model struggles with most across this same period, Pinot Blanc and Riesling, are not the ones the smoke-taint story would have predicted, and Pinot Blanc's result rests on a sample too thin to weigh heavily on its own. Weather does appear to leave a more visible mark on some varieties than others, but not necessarily the ones a single dramatic year would lead us to expect, and not always for reasons a climate-and-variety model alone can identify.
+Our post-2020 case study aligns with our earlier findings while also complicating them. If weather were leaving a uniform mark across varieties, we would expect the variety our earlier analysis flagged as hit hardest by 2020 wildfire smoke, Pinot Noir, to also be the hardest for a climate model to explain across the recovery years that followed. It is not. Once the window widens to 2020 through 2024, Pinot Noir's yield is among the best-explained of any variety, and consistently better than a climate-only model would predict, showing a genuine recovery rather than a lingering instability. The varieties our summer model struggles with most across this same period, Pinot Blanc and Riesling, are not the ones the smoke-taint story would have predicted, and Pinot Blanc's result rests on a sample too thin to weigh heavily on its own. Weather does appear to leave a more visible mark on some varieties than others, but not necessarily the ones a single dramatic year would lead us to expect, and not always for reasons a climate-and-variety model alone can identify.
 
-For over three decades, the consolidation around Pinot Noir and the decline in Chardonnay and Riesling shares occurred over the same period that Oregon's climate indicators shifted. Pinot Noir shows a moderate positive yield relationship with heat accumulation in our data, comparable to Pinot Gris and stronger than several other varieties, so nothing in our yield findings suggests this consolidation has come at a yield cost. But the diurnal-range finding is the one piece of evidence in this entire report that has not yet shown up in a production number, a leading indicator for a wine-quality risk that a yield-only model, ours included, is structurally unable to see.
+This same climate shift also coincided with a real industry response: a consolidation around Pinot Noir, with Chardonnay and Riesling's statewide shares declining over the same period. Pinot Noir shows a moderate positive yield relationship with heat accumulation in our data, comparable to Pinot Gris and stronger than several other varieties, so nothing in our yield findings suggests this consolidation has come at a yield cost. But the diurnal-range finding is the one piece of evidence in this entire report that has not yet shown up in a production number, a leading indicator for a wine-quality risk that a yield-only model, ours included, is structurally unable to see.
 
 ## Limitations
 
@@ -105,26 +105,4 @@ Several limitations shape how far these findings should be read. Our usable mach
 
 ## Future work
 
-The honest answer to our original research question is that Oregon's climate-wine relationship has evolved in a way that is currently invisible in the production data, and will most plausibly first appear in the fruit quality of the state's most heat-sensitive, most heavily planted variety. That is precisely the risk this project was motivated on. Building a public, climate-linked Oregon wine dataset where none currently exists, sets out to help detect precisely where we would point future work: extending this model to a genuine quality proxy, such as price premium or critic-score data, rather than yield alone, disaggregating the thin varieties our current sample cannot yet characterize with confidence as more years of data accumulate, and extending the comparison to California and Washington that our original proposal envisioned but our first-phase data constraints did not yet allow
-
-```{r variety-summary-table}
-#| echo: false
-#| warning: false
-#| message: false
-ml_varieties <- c("Pinot Blanc", "Merlot", "Pinot Gris", "Cabernet Savignon",
-                   "Gewurztraminer", "Riesling/White Riesling", "Chardonnay", "Pinot Noir")
-
-variety_summary <- regional %>%
-  filter(!is.na(yield_derived), !is.na(acres_harvested), acres_harvested > 0
-         , !region_label %in% c("Eastern Oregon", "Other Region", "Other Oregon")
-         , variety_label %in% ml_varieties) %>%
-  group_by(variety_label) %>%
-  summarise(
-    `Avg yield (tons/acre)` = round(mean(yield_derived, na.rm = TRUE), 2)
-    , `Avg harvested acres`  = round(mean(acres_harvested, na.rm = TRUE), 0)
-    , .groups = "drop"
-  ) %>%
-  arrange(desc(`Avg harvested acres`))
-
-knitr::kable(variety_summary, col.names = c("Variety", "Avg yield (tons/acre)", "Avg harvested acres"))
-```
+The honest answer to our original research question is that Oregon's climate-wine relationship has evolved in a way that is currently invisible in the production data, and will most plausibly first appear in the fruit quality of the state's most heat-sensitive, most heavily planted variety. That is precisely the risk this project's founding motivation, building a public, climate-linked Oregon wine dataset where none currently exists, was designed to help detect. It is also where we would point future work: extending this model to a genuine quality proxy, such as price premium or critic-score data, rather than yield alone, disaggregating the thin varieties our current sample cannot yet characterize with confidence as more years of data accumulate, and extending the comparison to California and Washington that our original proposal envisioned but our first-phase data constraints did not allow.
